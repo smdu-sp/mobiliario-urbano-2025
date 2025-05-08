@@ -1,0 +1,5 @@
+const privateRoutes = ["/"]
+
+export {
+    privateRoutes
+}

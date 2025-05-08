@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Permissao {
+  DEV
+  LICITACAO
+  JULGADORA
+}
+
+model Usuario {
+  id            String    @id @default(uuid())
+  nome          String
+  email         String    @unique
+  login         String    @unique
+  permissao     Permissao
+
+  criadoEm      DateTime  @default(now())
+  atualizadoEm  DateTime  @default(now())
+
+  @@map("usuarios")
+}
+
+model Cadastro {
+  id            String    @id @default(uuid())
+  nome          String
+  email         String
+  cnpj          String    @unique
+  cep           String
+  uf            String    @db.VarChar(2)
+  cidade        String
+  logradouro    String
+  numero        String?
+  complemento   String?
+  protocolo     String    @unique
+
+  criadoEm      DateTime  @default(now())
+  atualizadoEm  DateTime  @default(now()) @updatedAt
+
+  arquivos      Arquivo[]
+
+  @@map("cadastros")
+}
+
+enum TipoArquivo {
+  DOC_ESPECIFICA
+  PROJETOS
+}
+
+model Arquivo {
+  id            String    @id @default(uuid())
+  nome          String
+  caminho       String
+  tipo          TipoArquivo
+  cadastroId    String
+
+  criadoEm      DateTime  @default(now())
+  atualizadoEm  DateTime  @default(now())
+
+  cadastro      Cadastro  @relation(fields: [cadastroId], references: [id])
+
+  @@map("arquivos")
+}
