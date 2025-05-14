@@ -5,8 +5,69 @@ import Stepper, { Step } from '@/components/stepper';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { form, formSchema } from './_components/form-schema';
 import { z } from 'zod';
+import { Controller, useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import DragDropInput from '@/components/drag-drop-input';
+
+const formSchema = z.object({
+    nome: z.string({
+        required_error: "Nome é obrigatório!",
+        invalid_type_error: "Nome é obrigatório!",
+    }),
+    email: z.string({
+        required_error: "E-mail é obrigatório!",
+        invalid_type_error: "E-mail é obrigatório!",
+    }).email({
+        message: "E-mail inválido!"
+    }),
+    cnpj: z.string({
+        required_error: "CNPJ é obrigatório!",
+        invalid_type_error: "CNPJ é obrigatório!",
+    }),
+    cep: z.string({
+        required_error: "CEP é obrigatório!",
+        invalid_type_error: "CEP é obrigatório!",
+    }).min(9, "CEP inválido!").max(9, "CEP inválido!"),
+    uf: z.string({
+        required_error: "UF é obrigatório!",
+        invalid_type_error: "UF é obrigatório!",
+    }).min(2, "UF inválida!").max(2, "UF inválida!"),
+    cidade: z.string({
+        required_error: "Cidade é obrigatório!",
+        invalid_type_error: "Cidade é obrigatório!",
+    }),
+    logradouro: z.string({
+        required_error: "Logradouro é obrigatório!",
+        invalid_type_error: "Logradouro é obrigatório!",
+    }),
+    numero: z.string().optional(),
+    complemento: z.string().optional(),
+    doc_especifica: z
+        .array(z.instanceof(File))
+        .min(1, { message: "Pelo menos um arquivo é necessário" })
+        .refine(
+            (files) => {
+                const totalSize = files.reduce((sum, file) => sum + file.size, 0)
+                return totalSize <= 20 * 1024 * 1024
+            },
+            {
+                message: "O tamanho total dos arquivos não pode exceder 20MB",
+            },
+        ),
+    projetos: z
+        .array(z.instanceof(File))
+        .min(1, { message: "Pelo menos um arquivo é necessário" })
+        .refine(
+            (files) => {
+                const totalSize = files.reduce((sum, file) => sum + file.size, 0)
+                return totalSize <= 130 * 1024 * 1024
+            },
+            {
+                message: "O tamanho total dos arquivos não pode exceder 130MB",
+            },
+        ),
+});
 
 export default function Inscricao() {
     const initialStep = 1
@@ -29,6 +90,23 @@ export default function Inscricao() {
             console.log(data)
         })
     }
+
+    const form = useForm<z.infer<typeof formSchema>>({
+        resolver: zodResolver(formSchema),
+        defaultValues: {
+            nome: "",
+            email: "",
+            cnpj: "",
+            cep: "",
+            uf: "",
+            cidade: "",
+            logradouro: "",
+            numero: "",
+            complemento: "",
+            doc_especifica: [],
+            projetos: [],
+        },
+    });
 
     return <div className="max-w-3xl mx-auto">
         <Form {...form}>
@@ -197,12 +275,46 @@ export default function Inscricao() {
                         </div>
                     </Step>
                     <Step>
-                        <h2>Step 3</h2>
-                        <Input type='text' defaultValue={teste2} onChange={(event) => { setTeste2(event.target.value) }} required />
+                        <FormField
+                            control={form.control}
+                            name="doc_especifica"
+                            render={({ field }) => (
+                                <FormItem className="col-span-4 gap-3">
+                                    <div className="leading-none font-semibold">Documentação</div>
+                                    <FormControl>
+                                        <DragDropInput
+                                            multiple={true}
+                                            maxSize={20 * 1024 * 1024}
+                                            accept="image/*,.pdf,.doc,.docx"
+                                            helperText="Máximo 20MB total."
+                                            error={form.formState.errors.doc_especifica?.message}
+                                            field={{ ...field }}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                     </Step>
                     <Step>
-                        <h2>Step 4</h2>
-                        <Input type='text' defaultValue={teste3} onChange={(event) => { setTeste3(event.target.value) }} required />
+                        <FormField
+                            control={form.control}
+                            name="projetos"
+                            render={({ field }) => (
+                                <FormItem className="col-span-4 gap-3">
+                                    <div className="leading-none font-semibold">Projetos</div>
+                                    <FormControl>
+                                        <DragDropInput
+                                            multiple={true}
+                                            maxSize={130 * 1024 * 1024}
+                                            accept="image/*,.pdf,.doc,.docx"
+                                            helperText="Máximo 130MB total."
+                                            error={form.formState.errors.projetos?.message}
+                                            field={{ ...field }}
+                                        />
+                                    </FormControl>
+                                </FormItem>
+                            )}
+                        />
                     </Step>
                 </Stepper>
             </form>

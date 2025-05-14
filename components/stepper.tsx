@@ -92,7 +92,7 @@ export default function Stepper({
 
   return (
     <div
-      className="flex min-h-full flex-1 flex-col items-center justify-center p-4"
+      className="flex flex-1 flex-col items-center justify-center p-4"
       {...rest}
     >
       <div
@@ -139,14 +139,14 @@ export default function Stepper({
           isCompleted={false}
           currentStep={currentStep}
           direction={direction}
-          className={`space-y-2 px-8 ${contentClassName}`}
+          className={`space-y-2 h-full ${contentClassName}`}
         >
           {!isCompleted && stepsArray[currentStep - 1]}
           {isCompleted && final}
         </StepContentWrapper>
 
         {!isCompleted ? (
-          <div className={`px-8 py-4 pb-8 ${footerClassName}`}>
+          <div className={`px-8 pb-8 ${footerClassName}`}>
             <div
               className={`mt-10 flex ${
                 currentStep !== 1 ? "justify-between" : "justify-end"
@@ -224,21 +224,19 @@ function StepContentWrapper({
   children,
   className = "",
 }: StepContentWrapperProps) {
-  const [parentHeight, setParentHeight] = useState<number>(0);
+  // const [parentHeight, setParentHeight] = useState<number>(0);
 
   return (
     <motion.div
-      style={{ position: "relative", overflow: "hidden" }}
-      animate={{ height: isCompleted ? 0 : parentHeight }}
       transition={{ type: "spring", duration: 0.4 }}
-      className={className}
+      className={`${className} relative`}
     >
       <AnimatePresence initial={false} mode="sync" custom={direction}>
         {!isCompleted && (
           <SlideTransition
             key={currentStep}
             direction={direction}
-            onHeightReady={(h) => setParentHeight(h)}
+            // onHeightReady={(h) => setParentHeight(h)}
           >
             {children}
           </SlideTransition>
@@ -251,21 +249,20 @@ function StepContentWrapper({
 interface SlideTransitionProps {
   children: ReactNode;
   direction: number;
-  onHeightReady: (height: number) => void;
+  // onHeightReady: (height: number) => void;
 }
 
 function SlideTransition({
   children,
   direction,
-  onHeightReady,
+  // onHeightReady,
 }: SlideTransitionProps) {
   const containerRef = useRef<HTMLDivElement | null>(null);
-
+  const [position, setPosition] = useState("")
   useLayoutEffect(() => {
-    if (containerRef.current) {
-      onHeightReady(containerRef.current.offsetHeight);
-    }
-  }, [children, onHeightReady]);
+    setPosition("absolute")
+    setPosition("fixed")
+  }, [children]);
 
   return (
     <motion.div
@@ -275,8 +272,8 @@ function SlideTransition({
       initial="exit"
       animate="center"
       exit="enter"
-      transition={{ duration: 0.4 }}
-      style={{ position: "absolute", left: 0, right: 0, top: 0 }}
+      transition={{ duration: 0 }}
+      style={{ left: 0, right: 0, top: 0 }}
     >
       {children}
     </motion.div>
