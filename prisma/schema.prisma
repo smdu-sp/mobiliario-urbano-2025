@@ -34,7 +34,7 @@ model Usuario {
 }
 
 model Cadastro {
-  id            String    @id @default(uuid())
+  id            Int       @id @default(autoincrement())
   nome          String
   email         String
   cnpj          String    @unique
@@ -44,7 +44,7 @@ model Cadastro {
   logradouro    String
   numero        String?
   complemento   String?
-  protocolo     String    @unique
+  protocolo     String?   @unique
 
   criadoEm      DateTime  @default(now())
   atualizadoEm  DateTime  @default(now()) @updatedAt
@@ -64,7 +64,7 @@ model Arquivo {
   nome          String
   caminho       String
   tipo          TipoArquivo
-  cadastroId    String
+  cadastroId    Int
 
   criadoEm      DateTime  @default(now())
   atualizadoEm  DateTime  @default(now())

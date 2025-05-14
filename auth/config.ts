@@ -1,5 +1,5 @@
 import Credentials from "next-auth/providers/credentials"
-import { db } from "../lib/prisma"
+import { bind } from "../services/ldap"
 
 export default {
     providers: [
@@ -11,27 +11,25 @@ export default {
             },
             authorize: async (credentials) => {
                 const date = new Date()
-                let user = null
                 const { login, senha } = credentials
                 if (!login || !senha) return null
-                user = await db.usuario.findUnique({ where: { login: login as string }})
-                if (!user) {
-                    user = await db.usuario.create({
-                       data: {
-                        nome: "Victor Alexander Menezes de Abreu",
-                        login: "d927014",
-                        email:  "vmabreu@prefeitura.sp.gov.br",
-                        permissao: "DEV"
-                       }
+                const resposta = await fetch(`${process.env.API_BASE}/api/ldap/bind`, {
+                    method: "POST",
+                    body: JSON.stringify({
+                        login: login as string,
+                        senha: senha as string
                     })
-                }
-                if (date < new Date("2025-06-02") && user.permissao !== "DEV") return null
+                })
+                if (resposta.status !== 200) return null
+                const { usuario } = await resposta.json()
+                if (!usuario) return null
+                if (date < new Date("2025-06-02") && usuario.permissao !== "DEV") return null
                 return {
-                    id: user.id,
-                    email: user.email,
-                    nome: user.nome,
-                    login: user.login,
-                    permissao: user.permissao,
+                    id: usuario.id,
+                    email: usuario.email,
+                    nome: usuario.nome,
+                    login: usuario.login,
+                    permissao: usuario.permissao,
                 }
             },
         }),

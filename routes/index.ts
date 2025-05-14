@@ -1,4 +1,4 @@
-const privateRoutes = ["/"]
+const privateRoutes = ["/cadastros"]
 
 export {
     privateRoutes
