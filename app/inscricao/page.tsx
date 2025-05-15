@@ -283,12 +283,12 @@ export default function Inscricao() {
                                     <div className="leading-none font-semibold">Documentação</div>
                                     <FormControl>
                                         <DragDropInput
+                                            { ...field }
                                             multiple={true}
                                             maxSize={20 * 1024 * 1024}
                                             accept="image/*,.pdf,.doc,.docx"
                                             helperText="Máximo 20MB total."
                                             error={form.formState.errors.doc_especifica?.message}
-                                            field={{ ...field }}
                                         />
                                     </FormControl>
                                 </FormItem>
@@ -304,12 +304,12 @@ export default function Inscricao() {
                                     <div className="leading-none font-semibold">Projetos</div>
                                     <FormControl>
                                         <DragDropInput
+                                            { ...field }
                                             multiple={true}
                                             maxSize={130 * 1024 * 1024}
                                             accept="image/*,.pdf,.doc,.docx"
                                             helperText="Máximo 130MB total."
                                             error={form.formState.errors.projetos?.message}
-                                            field={{ ...field }}
                                         />
                                     </FormControl>
                                 </FormItem>

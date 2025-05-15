@@ -159,29 +159,30 @@ const DragDropInput = forwardRef<DragDropInputRef, DragDropInputProps>(
     }
 
     const removeFile = (index: number) => {
-      if (disabled) return
+      if (disabled) return;
 
-      setFiles((prev) => {
-        const newFiles = [...prev]
-        // Revogar URL do objeto para evitar vazamentos de memória
-        if (newFiles[index].preview) {
-          URL.revokeObjectURL(newFiles[index].preview!)
-        }
-        newFiles.splice(index, 1)
+      // Primeiro, vamos revogar a URL do objeto se necessário
+      if (files[index]?.preview) {
+        URL.revokeObjectURL(files[index].preview!);
+      }
 
-        // Notificar react-hook-form sobre a mudança
-        if (field) {
-          field.onChange(newFiles)
-        }
-
-        // Chamar callback personalizado se fornecido
-        if (onChange) {
-          onChange(newFiles)
-        }
-
-        return newFiles
-      })
-    }
+      // Agora, vamos criar uma nova lista de arquivos sem o arquivo removido
+      const newFiles = [...files];
+      newFiles.splice(index, 1);
+      
+      // Atualizar o estado com a nova lista
+      setFiles(newFiles);
+      
+      // Notificar react-hook-form sobre a mudança
+      if (field) {
+        field.onChange(newFiles);
+      }
+      
+      // Chamar callback personalizado se fornecido
+      if (onChange) {
+        onChange(newFiles);
+      }
+    };
 
     const formatFileSize = (bytes: number): string => {
       if (bytes < 1024) return bytes + " B"

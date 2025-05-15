@@ -4,10 +4,11 @@ import React, {
   useRef,
   useLayoutEffect,
   HTMLAttributes,
-  ReactNode,
-} from "react";
-import { motion, AnimatePresence, Variants } from "framer-motion";
+  ReactNode
+} from 'react';
+import { AnimatePresence, motion, Variants } from "framer-motion";
 import { Button } from "./ui/button";
+
 
 interface StepperProps extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
