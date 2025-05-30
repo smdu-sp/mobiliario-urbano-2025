@@ -13,7 +13,7 @@ export default {
                 const date = new Date()
                 const { login, senha } = credentials
                 if (!login || !senha) return null
-                const resposta = await fetch(`${process.env.API_BASE}/api/ldap/bind`, {
+                const resposta = await fetch(`${process.env.BASE_URL || "http://localhost:3000"}/api/ldap/bind`, {
                     method: "POST",
                     body: JSON.stringify({
                         login: login as string,

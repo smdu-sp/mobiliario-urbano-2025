@@ -7,7 +7,7 @@ import { cn } from "@/lib/utils"
 import type { FieldValues, UseFormRegisterReturn, ControllerRenderProps } from "react-hook-form"
 import type React from "react"
 
-interface FileWithPreview extends File {
+export interface FileWithPreview extends File {
   preview?: string
 }
 

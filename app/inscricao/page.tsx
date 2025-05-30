@@ -4,460 +4,542 @@ import { BaseSyntheticEvent, startTransition, useState } from 'react';
 import Stepper, { Step } from '@/components/stepper';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import { z } from 'zod';
-import { Controller, useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import DragDropInput from '@/components/drag-drop-input';
 import { formatarCEP, formatarCNPJ, formatarCPF, formatarTelefone, formataUF } from '@/lib/utils';
 import { ViaCepResposta } from '../api/buscar-cep/[cep]/cep.dto';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Separator } from '@radix-ui/react-context-menu';
-
-const formSchema = z.object({
-    nome: z.string({
-        required_error: "Nome é obrigatório!",
-        invalid_type_error: "Nome é obrigatório!",
-    }),
-    email: z.string({
-        required_error: "E-mail é obrigatório!",
-        invalid_type_error: "E-mail é obrigatório!",
-    }).email({
-        message: "E-mail inválido!"
-    }),
-    cnpj: z.string({
-        required_error: "CNPJ é obrigatório!",
-        invalid_type_error: "CNPJ é obrigatório!",
-    }).min(18, "CNPJ inválido!").max(18, "CNPJ inválido!"),
-    cpf: z.string({
-        required_error: "CPF é obrigatório!",
-        invalid_type_error: "CPF é obrigatório!",
-    }).min(14, "CPF inválido!").max(14, "CPF inválido!"),
-    telefone: z.string({
-        required_error: "Telefone é obrigatório!",
-        invalid_type_error: "Telefone é obrigatório!",
-    }).min(14, "Telefone inválido!").max(15, "Telefone inválido!"),
-    carteira_tipo: z.enum(["CAU", "CREA"], {
-        required_error: "Tipo de carteira é obrigatório!",
-        invalid_type_error: "Tipo de carteira é obrigatório!",
-    }),
-    carteira_numero: z.string({
-        required_error: "Número de carteira é obrigatório!",
-        invalid_type_error: "Número de carteira é obrigatório!",
-    }),
-    cep: z.string({
-        required_error: "CEP é obrigatório!",
-        invalid_type_error: "CEP é obrigatório!",
-    }).min(9, "CEP inválido!").max(9, "CEP inválido!"),
-    uf: z.string({
-        required_error: "UF é obrigatório!",
-        invalid_type_error: "UF é obrigatório!",
-    }).min(2, "UF inválida!").max(2, "UF inválida!"),
-    cidade: z.string({
-        required_error: "Cidade é obrigatório!",
-        invalid_type_error: "Cidade é obrigatório!",
-    }),
-    logradouro: z.string({
-        required_error: "Logradouro é obrigatório!",
-        invalid_type_error: "Logradouro é obrigatório!",
-    }),
-    numero: z.string().optional(),
-    complemento: z.string().optional(),
-    doc_especifica: z
-        .array(z.instanceof(File))
-        .min(1, { message: "Pelo menos um arquivo é necessário" })
-        .refine(
-            (files) => {
-                const totalSize = files.reduce((sum, file) => sum + file.size, 0)
-                return totalSize <= 20 * 1024 * 1024
-            },
-            {
-                message: "O tamanho total dos arquivos não pode exceder 20MB",
-            },
-        ),
-    projetos: z
-        .array(z.instanceof(File))
-        .min(1, { message: "Pelo menos um arquivo é necessário" })
-        .refine(
-            (files) => {
-                const totalSize = files.reduce((sum, file) => sum + file.size, 0)
-                return totalSize <= 130 * 1024 * 1024
-            },
-            {
-                message: "O tamanho total dos arquivos não pode exceder 130MB",
-            },
-        ),
-});
+import { Separator } from '@/components/ui/separator';
+import { CardTitle } from '@/components/ui/card';
+import ModalConcluido from './_components/modal-concluido';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Label } from '@/components/ui/label';
+import { IParticipante } from '../api/cadastro/cadastro.dto';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Plus, X } from 'lucide-react';
 
 export default function Inscricao() {
     const initialStep = 1
-    const [currentStep, setCurrentStep] = useState(initialStep)
-    const [done, setDone] = useState(false)
+    const [open, setOpen] = useState(false)
+    const [step, setStep] = useState(initialStep)
+    const [protocolo, setProtocolo] = useState("")
+    const router = useRouter()
+
+    const [nome, setNome] = useState("")
+    const [email, setEmail] = useState("")
+    const [telefone, setTelefone] = useState("")
+    const [cpf, setCpf] = useState("")
+    const [cnpj, setCnpj] = useState("")
+    const [carteira_tipo, setCarteira_tipo] = useState("CAU")
+    const [carteira_numero, setCarteira_numero] = useState("")
+    const [equipe, setEquipe] = useState(false);
+    const [cep, setCep] = useState("")
+    const [uf, setUf] = useState("")
+    const [cidade, setCidade] = useState("")
+    const [logradouro, setLogradouro] = useState("")
+    const [numero, setNumero] = useState("")
+    const [complemento, setComplemento] = useState("")
+    const [doc_especifica, setDoc_especifica] = useState<File[]>([])
+    const [projetos, setProjetos] = useState<File[]>([])
+    const [termos, setTermos] = useState(false);
+    const [envioUnico, setEnvioUnico] = useState(false);
+    const [participantes, setParticipantes] = useState<IParticipante[]>([])
+
+    const [participanteNome, setParticipanteNome] = useState("")
+    const [participanteDocumento, setParticipanteDocumento] = useState("")
 
     function Finalizado() {
-        return <div className="grid grid-cols-2 gap-2 px-10">
-            <div>
-                <p><span className="font-bold">Nome:</span> {form.getValues("nome")}</p>
-                <p><span className="font-bold">E-mail:</span> {form.getValues("email")}</p>
-                <p><span className="font-bold">CNPJ:</span> {form.getValues("cnpj")}</p>
-                <p><span className="font-bold">CPF:</span> {form.getValues("cpf")}</p>
-                <p><span className="font-bold">Telefone:</span> {form.getValues("telefone")}</p>
-                <p><span className="font-bold">Carteira de ordem:</span> {form.getValues("carteira_tipo")} - {form.getValues("carteira_numero")}</p>
+        return <div className="flex flex-col gap-2 px-8 md:px-16 md:py-4">
+            <CardTitle className="text-lg mb-2">Responsável pelo projeto</CardTitle>
+            <div className="flex flex-col gap-2 text-muted-foreground">
+                <p>{nome}</p>
+                <p>{email}</p>
+                <p>{telefone}</p>
+                <p>{cpf}</p>
+                <p>{cnpj}</p>
+                {carteira_numero && <p>{carteira_tipo} - {carteira_numero}</p>}
             </div>
-            <div>
-                <p><span className="font-bold">CEP:</span> {form.getValues("cep")}</p>
-                <p><span className="font-bold">UF:</span> {form.getValues("uf")}</p>
-                <p><span className="font-bold">Cidade:</span> {form.getValues("cidade")}</p>
-                <p><span className="font-bold">Logradouro:</span> {form.getValues("logradouro")}</p>
-                <p><span className="font-bold">Numero:</span> {form.getValues("numero")}</p>
-                <p><span className="font-bold">Complemento:</span> {form.getValues("complemento")}</p>
+            <Separator className="my-4" />
+            <CardTitle className="text-lg mb-2">Endereço</CardTitle>
+            <div className="flex flex-col gap-2 text-muted-foreground">
+                <p>{cep}</p>
+                <p>{logradouro}{numero && `, ${numero}`}{complemento && ` - ${complemento}`}</p>
+                <p>{cidade} - {uf}</p>
             </div>
-            <div className="col-span-2">
-                <p><span className="font-bold">Documentos:</span> {form.getValues("doc_especifica").length} arquivo(s)</p>
-                <p><span className="font-bold">Projetos:</span> {form.getValues("projetos").length} arquivo(s)</p>
+            <Separator className="my-4" />
+            <CardTitle className="text-lg mb-2">Documentos enviados</CardTitle>
+            <div className="flex flex-col gap-2 text-muted-foreground">
+                <p>Documentos de inscrição: {doc_especifica.length} arquivo{doc_especifica.length > 1 && "s"}</p>
+                <p>Projetos: {projetos.length} arquivo{projetos.length > 1 && "s"}</p>
             </div>
+            <Separator className="my-4" />
+            <FormItem className="gap-1 flex items-center space-x-2">
+                <Checkbox
+                    name="termos"
+                    checked={termos}
+                    onCheckedChange={(checked) => setTermos(checked as boolean)}
+                />
+                <Label htmlFor="termos" className="cursor-pointer" onClick={() => setTermos(!termos)}>
+                    Declaro que as informações aqui prestadas são verdadeiras mediante pena de lei .....
+                </Label>
+            </FormItem>
         </div>
     }
 
     function Submit() {
-        return <Button disabled={form.formState.isSubmitting} type="submit">Enviar dados</Button>
+        return <Button disabled={!termos || !stepCompleted()} variant={termos && stepCompleted() ? "default" : "outline"} type="submit">
+            {termos ? (!stepCompleted() ? "Formulário incompleto" : "Enviar") : "Você deve aceitar os termos"}
+        </Button>
     }
 
-    function handleSubmit(data: z.infer<typeof formSchema>, event?: BaseSyntheticEvent<object, any, any> | undefined) {
+    function handleSubmit(event?: BaseSyntheticEvent<object, any, any> | undefined) {
         event?.preventDefault()
-        startTransition(() => {
-            console.log(data)
+        const formData = new FormData();
+        formData.append("nome", nome);
+        formData.append("email", email);
+        formData.append("telefone", telefone);
+        formData.append("cpf", cpf);
+        formData.append("cnpj", cnpj);
+        formData.append("carteira_tipo", carteira_tipo);
+        formData.append("carteira_numero", carteira_numero);
+        formData.append("cep", cep);
+        formData.append("logradouro", logradouro);
+        formData.append("cidade", cidade);
+        formData.append("uf", uf);
+        numero && formData.append("numero", numero);
+        complemento && formData.append("complemento", complemento);
+        for (var x = 0; x < doc_especifica.length; x++)
+            formData.append("doc_especifica", doc_especifica[x])
+        for (var x = 0; x < projetos.length; x++)
+            formData.append("projetos", projetos[x])
+
+        startTransition(async () => {
+            const res = await fetch(`${process.env.BASE_URL || "http://localhost:3000"}/api/cadastro`, {
+                method: "POST",
+                body: formData
+            });
+            if (res.status === 201) {
+                const data = await res.json();
+                setProtocolo(data.protocolo)
+                setOpen(true)
+            } else {
+                toast.error("Erro ao enviar inscrição. Tente novamente.")
+            }            
         })
     }
-
-    const form = useForm<z.infer<typeof formSchema>>({
-        resolver: zodResolver(formSchema),
-        defaultValues: {
-            nome: "",
-            email: "",
-            cnpj: "",
-            cep: "",
-            uf: "",
-            cidade: "",
-            logradouro: "",
-            numero: "",
-            complemento: "",
-            doc_especifica: [],
-            projetos: [],
-        },
-    });
 
     async function buscaCEP(cep: string) {
         cep = cep.replace(/\D/g, '').trim().substring(0, 8);
         if (cep.length === 8) {
-            const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-            const data: ViaCepResposta = await response.json()
-            form.setValue("uf", data.uf ? data.uf : '');
-            form.setValue("cidade", data.localidade ? data.localidade : '');
-            form.setValue("logradouro", data.logradouro ? data.logradouro : '');
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+                const data: ViaCepResposta = await response.json()
+                setUf(data.uf ? data.uf : '');
+                setCidade(data.localidade ? data.localidade : '');
+                setLogradouro(data.logradouro ? data.logradouro : '');
+            } catch (error) {
+                console.error('Erro ao buscar CEP:', error);
+            }
         }
     }
 
+    function stepCompleted() {
+        let completed = true
+        switch (step) {
+            case 1:
+                completed = checkStep1()
+                break;
+            case 2:
+                completed = checkStep2()
+                break;
+            case 3:
+                completed = checkStep3()
+                break;
+            case 4:
+                completed = checkStep4()
+                break;
+            case 5:
+                completed = checkStep5()
+                break;
+            case 6:
+                completed = checkStep6()
+                break;
+        }
+        return completed
+    }
+
+    function checkStep1() {
+        return envioUnico
+    }
+
+    function checkStep2() {
+        let step2 = true
+        if (
+            !nome || 
+            !email || 
+            !telefone || 
+            !cpf || 
+            !cnpj || 
+            !carteira_tipo || 
+            !carteira_numero ||
+            nome === "" || 
+            email === "" || 
+            telefone === "" || 
+            cpf === "" || 
+            cnpj === "" ||
+            carteira_numero === "" ||
+            nome.length < 3 ||
+            !email.includes("@") ||
+            telefone.length < 14 ||
+            cpf.length < 14 ||
+            cnpj.length < 18
+        ) step2 = false
+        return step2
+    }
+
+    function checkStep3() {
+        let step3 = true
+        if (equipe) step3 = validaEquipe()
+        if (!equipe) step3 = validaEndereco()
+        return step3
+    }
+
+    function checkStep4() {
+        let step4 = true
+        if (equipe) step4 = validaEndereco()
+        if (!equipe) step4 = doc_especifica.length > 0
+        return step4
+    }
+
+    function checkStep5() {
+        let step5 = true
+        if (equipe) step5 = doc_especifica.length > 0
+        if (!equipe) step5 = projetos.length > 0
+        return step5
+    }
+
+    function checkStep6() {
+        return projetos.length > 0
+    }
+
+    function validaEndereco() {
+        let valida = true
+        if (
+            !cep ||
+            !logradouro ||
+            !cidade ||
+            !uf ||
+            cep === "" ||
+            logradouro === "" ||
+            cidade === "" ||
+            uf === "" ||
+            uf.length !== 2 ||
+            cep.length !== 9
+        ) valida = false
+        return valida
+    }
+
+    function validaEquipe() {
+        let valida = true
+        valida = participantes.length > 0
+        return valida
+    }
+
+    function adicionarParticipante() {
+        setParticipantes([...participantes, {nome: participanteNome, documento: participanteDocumento}])
+        setParticipanteNome("")
+        setParticipanteDocumento("")
+    }
+
+    function removerParticipante(index: number): void {
+        const newParticipantes = [...participantes];
+        newParticipantes.splice(index, 1);
+        setParticipantes(newParticipantes);
+    }
+
     return <div className="max-w-3xl mx-auto">
-        <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSubmit)}>
-                <Stepper
-                    initialStep={initialStep}
-                    onStepChange={(step: number) => {
-                        setCurrentStep(step);
-                        setDone(false);
-                    }}
-                    onFinalStepCompleted={() => setDone(true)}
-                    backButtonText="Voltar"
-                    nextButtonText="Próximo"
-                    completeButtonText="Finalizar"
-                    disableStepIndicators={true}
-                    stepCircleContainerClassName="w-full"
-                    contentClassName="my-6"
-                    final={<Finalizado />}
-                    submitButton={<Submit />}
-                >
-                    <Step>
-                        <div className="flex flex-col gap-4">
-                            <div className="grid grid-cols-4 gap-6">
-                                {/* <span className="text-2xl col-span-4">Dados da Empresa</span> */}
-                                <FormField
-                                    control={form.control}
+        <form onSubmit={handleSubmit}>
+            <Stepper
+                initialStep={initialStep}
+                onStepChange={(step) => setStep(step)}
+                backButtonText="Voltar"
+                nextButtonText="Próximo"
+                completeButtonText="Finalizar"
+                disableStepIndicators={true}
+                stepCircleContainerClassName="w-full"
+                contentClassName="my-6"
+                final={<Finalizado />}
+                submitButton={<Submit />}
+                disableNextButton={false}
+            >
+                <Step>
+                    <div className="flex flex-col gap-4">
+                        <h2>Instruções sobre o envio dos dados</h2>
+                        <span className="text-muted-foreground">Preencha os campos abaixo com os dados pessoais e empresariais. Os arquivos de inscrição e projetos devem ser anexados ao formulário.</span>
+                        <span className="font-bold">O ENVIO É UNICO, NÃO SERÁ POSSÍVEL ALTERAR OS DADOS ENVIADOS.</span>
+                        <div className="gap-1 flex items-center space-x-2">
+                            <Checkbox
+                                name="envioUnico"
+                                onCheckedChange={(checked) => setEnvioUnico(checked as boolean)}
+                                checked={envioUnico}
+                            />
+                            <Label
+                                className="cursor-pointer"
+                                onClick={() => setEnvioUnico(!envioUnico)}
+                            >
+                                Declaro que li e desejo continuar.
+                            </Label>
+                        </div>
+                    </div>
+                </Step>
+                <Step>
+                    <div className="flex flex-col gap-4">
+                        <div className="grid grid-cols-4 gap-6">
+                            <div className="col-span-4 md:col-span-4 flex flex-col gap-3">
+                                <Label>Nome</Label>
+                                <Input 
+                                    placeholder="Nome do responsável pelo projeto"
                                     name="nome"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-4 gap-3 relative">
-                                            <FormLabel>Nome</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Nome do responsável pelo projeto" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="cpf"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2 gap-3 relative">
-                                            <FormLabel>CPF</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="000.000.000-00" 
-                                                    {...field}
-                                                    value={formatarCPF(field.value)}
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="cnpj"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2 gap-3 relative">
-                                            <FormLabel>CNPJ</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="00.000.0000/0000-00" 
-                                                    {...field}
-                                                    value={formatarCNPJ(field.value)}
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="email"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2 gap-3 relative">
-                                            <FormLabel>Email</FormLabel>
-                                            <FormControl>
-                                                <Input placeholder="Email" {...field} />
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="telefone"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-2 gap-3 relative">
-                                            <FormLabel>Telefone</FormLabel>
-                                            <FormControl>
-                                                <Input
-                                                    placeholder="(00) 90000-0000" 
-                                                    {...field}
-                                                    value={formatarTelefone(field.value)}
-                                                />
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="carteira_tipo"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-1 gap-3 relative">
-                                            <FormLabel>CAU/CREA</FormLabel>
-                                            <FormControl>
-                                                <Select
-                                                    onValueChange={field.onChange}
-                                                    defaultValue={field.value}
-                                                >
-                                                    <SelectTrigger className="w-full">
-                                                        <SelectValue placeholder="Selecione o tipo" />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        <SelectGroup>
-                                                            <SelectLabel>Tipo</SelectLabel>
-                                                            <SelectItem value="CAU">CAU</SelectItem>
-                                                            <SelectItem value="CREA">CREA</SelectItem>
-                                                        </SelectGroup>
-                                                    </SelectContent>
-                                                </Select>
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
-                                />
-                                <FormField
-                                    control={form.control}
-                                    name="carteira_numero"
-                                    render={({ field }) => (
-                                        <FormItem className="col-span-3 gap-3 relative">
-                                            <FormLabel>Número de identificação</FormLabel>
-                                            <FormControl>
-                                                <Input {...field} />
-                                            </FormControl>
-                                            <FormMessage className="absolute bottom-0" />
-                                        </FormItem>
-                                    )}
+                                    value={nome}
+                                    onChange={(e) => setNome(e.target.value)}
                                 />
                             </div>
+                            <div className="col-span-4 md:col-span-2 flex flex-col gap-3">
+                                <Label>CPF</Label>
+                                <Input
+                                    placeholder="000.000.000-00"
+                                    name="cpf"
+                                    value={cpf}
+                                    onChange={(e) => setCpf(formatarCPF(e.target.value))}
+                                />
+                            </div>
+                            <div className="col-span-4 md:col-span-2 flex flex-col gap-3">
+                                <Label>CNPJ</Label>
+                                <Input
+                                    placeholder="00.000.0000/0000-00"
+                                    name="cnpj"
+                                    value={cnpj}
+                                    onChange={(e) => setCnpj(formatarCNPJ(e.target.value))}
+                                />
+                            </div>
+                            <div className="col-span-4 md:col-span-2 flex flex-col gap-3">
+                                <Label>Email</Label>
+                                <Input
+                                    placeholder="exemplo@email.com"
+                                    name="email"
+                                    type="email"
+                                    value={email}
+                                    onChange={(e) => setEmail(e.target.value)}
+                                />
+                            </div>
+                            <div className="col-span-4 md:col-span-2 flex flex-col gap-3">
+                                <Label>Telefone</Label>
+                                <Input
+                                    placeholder="(00) 90000-0000"
+                                    name="telefone"
+                                    value={telefone}
+                                    onChange={(e) => setTelefone(formatarTelefone(e.target.value))}
+                                />
+                            </div>
+                            <div className="col-span-4 md:col-span-1 flex flex-col gap-3">
+                                <Label>CAU/CREA</Label>
+                                <Select
+                                    onValueChange={setCarteira_tipo}
+                                    defaultValue={carteira_tipo}
+                                >
+                                    <SelectTrigger className="w-full">
+                                        <SelectValue placeholder="Selecione o tipo" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        <SelectGroup>
+                                            <SelectLabel>Tipo</SelectLabel>
+                                            <SelectItem value="CAU">CAU</SelectItem>
+                                            <SelectItem value="CREA">CREA</SelectItem>
+                                        </SelectGroup>
+                                    </SelectContent>
+                                </Select>
+                            </div>
+                            <div className="col-span-4 md:col-span-3 flex flex-col gap-3">
+                                <Label>Número de identificação</Label>
+                                <Input
+                                    placeholder={carteira_tipo === "CAU" ? "A000000-0" : "0000000000"}
+                                    name="carteira_numero"
+                                    value={carteira_numero}
+                                    onChange={(e) => setCarteira_numero(e.target.value)}
+                                />
+                            </div>
+                            <div className="col-span-4 md:col-span-4 gap-1 flex items-center space-x-2">
+                                <Checkbox
+                                    name="equipe"
+                                    onCheckedChange={(checked) => setEquipe(checked as boolean)}
+                                    checked={equipe}
+                                />
+                                <Label
+                                    className="cursor-pointer"
+                                    onClick={() => setEquipe(!equipe)}
+                                >
+                                    Essa inscrição representa uma equipe.
+                                </Label>
+                            </div>
                         </div>
-                    </Step>
-                    <Step>
-                        <div className="grid grid-cols-4 gap-6">
-                            {/* <span className="text-2xl col-span-4">Endereço</span> */}
-                            <FormField
-                                control={form.control}
+                    </div>
+                </Step>
+                {equipe && <Step>
+                    <div className="flex flex-col gap-4">
+                        <div className="grid grid-cols-6 gap-3 items-end">
+                            <div className="col-span-6 rounded overflow-hidden"><Table>
+                                <TableHeader>
+                                    <TableRow className="bg-primary hover:bg-primary">
+                                        <TableHead colSpan={3}>
+                                            <div className="grid grid-cols-10 gap-1 w-full text-primary-foreground">
+                                                <div className="col-span-5">Nome</div>
+                                                <div className="col-span-4">Documento</div>
+                                                <div className="col-span-1"></div>
+                                            </div>
+                                        </TableHead>
+                                    </TableRow>
+                                </TableHeader>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell colSpan={3}>
+                                            <div className="grid grid-cols-10 gap-3 sm:gap-1 w-full">
+                                                <Input
+                                                    className="col-span-10 sm:col-span-5"
+                                                    placeholder="Nome do participante (empresa/pessoa física)"
+                                                    name="participanteNome"
+                                                    value={participanteNome}
+                                                    onChange={(e) => setParticipanteNome(e.target.value)}
+                                                />
+                                                <Input
+                                                    className="col-span-10 sm:col-span-4"
+                                                    placeholder="CPF/CNPJ"
+                                                    name="participanteDocumento"
+                                                    value={participanteDocumento}
+                                                    onChange={(e) => setParticipanteDocumento(formatarCPF(e.target.value))}
+                                                />
+                                                <Button className="col-span-10 mt-2 sm:mt-0 sm:col-span-1" type="button" onClick={() => adicionarParticipante()}>
+                                                    <Plus />
+                                                </Button>
+                                            </div>
+                                        </TableCell>
+                                    </TableRow>
+                                    {participantes.map((participante, index) => (
+                                        <TableRow key={index}>
+                                            <TableCell colSpan={3}>
+                                                <div className="grid grid-cols-10 gap-1 w-full items-center">
+                                                    <div className="col-span-5">{participante.nome}</div>
+                                                    <div className="col-span-4">{participante.documento}</div>
+                                                    <Button type="button" variant="link" className="col-span-1 rounded-full text-destructive" onClick={() => removerParticipante(index)}>
+                                                        <X />
+                                                    </Button>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table></div>
+                        </div>
+                    </div>
+                </Step>}
+                <Step>
+                    <div className="grid grid-cols-4 gap-6">
+                        <div className='col-span-4 md:col-span-4 flex flex-col gap-3'>
+                            <Label>CEP</Label>
+                            <Input
                                 name="cep"
-                                render={({ field }) => (
-                                    <FormItem className='col-span-4 gap-3 relative'>
-                                        <FormLabel>CEP</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="00000-000"
-                                                {...field}
-                                                value={formatarCEP(field.value)}
-                                                onBlur={(e) => buscaCEP(e.target.value)}
-                                                onChange={(e) => {
-                                                    field.onChange(e)
-                                                    form.setValue('logradouro', '')
-                                                    form.setValue('cidade', '')
-                                                    form.setValue('uf', '')
-                                                }}
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="bottom-0" />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="uf"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-1 gap-3 relative">
-                                        <FormLabel>Estado</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Estado"
-                                                {...field}
-                                                value={formataUF(field.value)}
-                                                readOnly
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute bottom-0" />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="cidade"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-3 gap-3 relative">
-                                        <FormLabel>Cidade</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Cidade"
-                                                {...field} 
-                                                readOnly
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute bottom-0" />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="logradouro"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-3 gap-3 relative">
-                                        <FormLabel>Logradouro</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Logradouro"
-                                                {...field} 
-                                                readOnly
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute bottom-0" />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="numero"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-1 gap-3 relative">
-                                        <FormLabel>Número</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Número"
-                                                {...field} 
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute bottom-0" />
-                                    </FormItem>
-                                )}
-                            />
-                            <FormField
-                                control={form.control}
-                                name="complemento"
-                                render={({ field }) => (
-                                    <FormItem className="col-span-4 gap-3 relative">
-                                        <FormLabel>Complemento</FormLabel>
-                                        <FormControl>
-                                            <Input
-                                                placeholder="Complemento"
-                                                {...field} 
-                                            />
-                                        </FormControl>
-                                        <FormMessage className="absolute bottom-0" />
-                                    </FormItem>
-                                )}
+                                placeholder="00000-000"
+                                value={cep}
+                                onBlur={(e) => buscaCEP(e.target.value)}
+                                onChange={(e) => {
+                                    setCep(formatarCEP(e.target.value))
+                                    setLogradouro('')
+                                    setCidade('')
+                                    setUf('')
+                                }}
                             />
                         </div>
-                    </Step>
-                    <Step>
-                        <FormField
-                            control={form.control}
-                            name="doc_especifica"
-                            render={({ field }) => (
-                                <FormItem className="col-span-4 gap-3">
-                                    <div className="leading-none font-semibold">Documentação</div>
-                                    <FormControl>
-                                        <DragDropInput
-                                            { ...field }
-                                            multiple={true}
-                                            maxSize={20 * 1024 * 1024}
-                                            accept="image/*,.pdf,.doc,.docx"
-                                            helperText="Máximo 20MB total."
-                                            error={form.formState.errors.doc_especifica?.message}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
+                        <div className="col-span-4 md:col-span-1 flex flex-col gap-3">
+                            <Label>Estado</Label>
+                            <Input
+                                placeholder="UF"
+                                value={uf}
+                                onChange={(e) => setUf(formataUF(e.target.value))}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-span-4 md:col-span-3 flex flex-col gap-3">
+                            <Label>Cidade</Label>
+                            <Input
+                                placeholder="Cidade"
+                                name="cidade"
+                                value={cidade}
+                                onChange={(e) => setCidade(e.target.value)}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-span-4 md:col-span-3 flex flex-col gap-3">
+                            <Label>Logradouro</Label>
+                            <Input
+                                placeholder="Logradouro"
+                                name="logradouro"
+                                value={logradouro}
+                                onChange={(e) => setLogradouro(e.target.value)}
+                                readOnly
+                            />
+                        </div>
+                        <div className="col-span-4 md:col-span-1 flex flex-col gap-3">
+                            <Label>Número</Label>
+                            <Input
+                                placeholder="Número"
+                                name="numero"
+                                value={numero}
+                                onChange={(e) => setNumero(e.target.value)}
+                            />
+                        </div>
+                        <div className="col-span-4 md:col-span-4 flex flex-col gap-3">
+                            <Label>Complemento</Label>
+                            <Input
+                                placeholder="Complemento"
+                                name="complemento"
+                                value={complemento}
+                                onChange={(e) => setComplemento(e.target.value)}
+                            />
+                        </div>
+                    </div>
+                </Step>
+                <Step>
+                    <div className="col-span-4 md:col-span-4 flex flex-col gap-3">
+                        <div className="leading-none font-semibold">Documentação</div>
+                        <DragDropInput
+                            multiple={true}
+                            maxSize={20 * 1024 * 1024}
+                            accept="image/*,.pdf,.doc,.docx"
+                            helperText="Máximo 20MB total."
+                            onChange={setDoc_especifica}
+                            value={doc_especifica}
                         />
-                    </Step>
-                    <Step>
-                        <FormField
-                            control={form.control}
-                            name="projetos"
-                            render={({ field }) => (
-                                <FormItem className="col-span-4 gap-3">
-                                    <div className="leading-none font-semibold">Projetos</div>
-                                    <FormControl>
-                                        <DragDropInput
-                                            { ...field }
-                                            multiple={true}
-                                            maxSize={130 * 1024 * 1024}
-                                            accept="image/*,.pdf,.doc,.docx"
-                                            helperText="Máximo 130MB total."
-                                            error={form.formState.errors.projetos?.message}
-                                        />
-                                    </FormControl>
-                                </FormItem>
-                            )}
+                    </div>
+                </Step>
+                <Step>
+                    <div className="col-span-4 md:col-span-4 flex flex-col gap-3">
+                        <div className="leading-none font-semibold">Projetos</div>
+                        <DragDropInput
+                            multiple={true}
+                            maxSize={130 * 1024 * 1024}
+                            accept="image/*,.pdf,.doc,.docx"
+                            helperText="Máximo 130MB total."
+                            onChange={setProjetos}
+                            value={projetos}
                         />
-                    </Step>
-                </Stepper>
-            </form>
-        </Form>
+                    </div>
+                </Step>
+            </Stepper>
+        </form>
+        <ModalConcluido open={open} protocolo={protocolo} onClose={() => {
+            setOpen(false)
+            router.push("/")
+        }} />
     </div>
 }
