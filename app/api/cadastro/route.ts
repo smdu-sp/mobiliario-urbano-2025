@@ -1,6 +1,7 @@
 // app/api/upload/route.ts
 import { criarCadastro } from '@/services/cadastros';
 import { NextRequest, NextResponse } from 'next/server';
+import { IParticipante } from './cadastro.dto';
 
 export async function POST(req: NextRequest) {
     try {
@@ -20,11 +21,12 @@ export async function POST(req: NextRequest) {
         const complemento = formData.get('complemento') as string | undefined;
         const doc_especifica = formData.getAll('doc_especifica') as unknown as File[];
         const projetos = formData.getAll('projetos') as unknown as File[];
+        const participantesTexto = formData.get('participantes') as unknown as string;
+        const participantes: IParticipante[] = JSON.parse(participantesTexto);
+        const equipe: boolean = formData.get('equipe') === 'true';
 
-        const cadastro = await criarCadastro({ nome, email, telefone, cpf, cnpj, carteira_tipo, carteira_numero, cep, logradouro, cidade, uf, numero, complemento, doc_especifica, projetos });
-        if (!cadastro) {
-            return NextResponse.json({ message: 'Falha ao enviar cadastro' }, { status: 500 });
-        }
+        const cadastro = await criarCadastro({ equipe, nome, email, telefone, cpf, cnpj, carteira_tipo, carteira_numero, cep, logradouro, cidade, uf, numero, complemento, doc_especifica, projetos, participantes });
+        if (!cadastro) return NextResponse.json({ message: 'Falha ao enviar cadastro' }, { status: 500 });
         return NextResponse.json({ protocolo: cadastro }, { status: 201 });
     } catch (error: any) {
         console.error('Error uploading file:', error);

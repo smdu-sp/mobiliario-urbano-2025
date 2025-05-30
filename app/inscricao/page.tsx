@@ -104,6 +104,7 @@ export default function Inscricao() {
         formData.append("cnpj", cnpj);
         formData.append("carteira_tipo", carteira_tipo);
         formData.append("carteira_numero", carteira_numero);
+        formData.append("equipe", equipe.toString());
         formData.append("cep", cep);
         formData.append("logradouro", logradouro);
         formData.append("cidade", cidade);
@@ -114,7 +115,7 @@ export default function Inscricao() {
             formData.append("doc_especifica", doc_especifica[x])
         for (var x = 0; x < projetos.length; x++)
             formData.append("projetos", projetos[x])
-
+        formData.append("participantes", JSON.stringify(participantes))
         startTransition(async () => {
             const res = await fetch(`${process.env.BASE_URL || "http://localhost:3000"}/api/cadastro`, {
                 method: "POST",
@@ -539,7 +540,6 @@ export default function Inscricao() {
         </form>
         <ModalConcluido open={open} protocolo={protocolo} onClose={() => {
             setOpen(false)
-            router.push("/")
         }} />
     </div>
 }

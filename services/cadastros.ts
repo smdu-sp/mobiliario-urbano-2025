@@ -12,10 +12,11 @@ function geraProtocolo(id: number) {
 
 async function criarCadastro(cadastro: CreteCadastro): Promise<string | null> {
     const protocolo = await db.$transaction(async (tx) => {
-        const { doc_especifica, projetos, ...data } = cadastro
+        const { doc_especifica, projetos, participantes, ...data } = cadastro
         const novo_cadastro = await tx.cadastro.create({ data })
         const protocolo = geraProtocolo(+novo_cadastro.id)
         try {
+            console.log(cadastro.equipe, participantes)
             if (doc_especifica.length > 0)
                 doc_especifica.map(async (file, index) => {
                     const ext = file.name.split('.').pop()
@@ -36,6 +37,8 @@ async function criarCadastro(cadastro: CreteCadastro): Promise<string | null> {
                     fs.writeFileSync(caminho, Buffer.from(data))
                     await tx.arquivo.create({ data: { caminho, cadastroId: novo_cadastro.id, tipo: "PROJETOS" }})
                 })
+            if (cadastro.equipe && participantes && participantes.length > 0)
+                console.log(await tx.participante.createMany({ data: participantes.map(participante => ({ ...participante, cadastroId: novo_cadastro.id }))}));
         } catch (error) {
             tx.cadastro.delete({ where: { id: novo_cadastro.id }})
             return null

@@ -3,15 +3,11 @@ import { DialogTitle, Dialog, DialogContent } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
 import { Copy } from "lucide-react";
 import { toast } from "sonner";
-import confetti from "canvas-confetti";
 
 interface ModalConcluidoProps {
   open: boolean;
   protocolo: string;
   onClose: () => void;
-}
-
-function ativarConfetti() {
 }
 
 const ModalConcluido: React.FC<ModalConcluidoProps> = ({ open, protocolo, onClose }) => {
@@ -24,7 +20,6 @@ const ModalConcluido: React.FC<ModalConcluidoProps> = ({ open, protocolo, onClos
             navigator.clipboard.writeText(protocolo).then(() => {
               toast.success("Protocolo copiado para a área de transferência");
             });
-            ativarConfetti();
           }}
           variant="outline"
           className="font-bold"
