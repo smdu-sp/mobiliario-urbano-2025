@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import Image from 'next/image';
 import escudo from '../public/escudo.png';
+import hero from '../public/hero-image.jpg';
 
 export default async function Home() {
 	const session = await auth();
@@ -64,25 +65,27 @@ export default async function Home() {
 								Contato
 							</Link>
 						</nav>
-						<Button
+						{/* <Button
 							variant='outline'
 							size='sm'
 							className='border-white text-white hover:bg-white hover:text-[#0066CC]'>
 							Acessibilidade
-						</Button>
+						</Button> */}
+						{session?.user?.nome}
+						<Sair session={session} />
 					</div>
 				</header>
 
 				{/* Banner do evento */}
 				<div className='relative h-[300px] md:h-[400px] lg:h-[500px] w-full'>
 					<Image
-						src='/placeholder.svg?height=500&width=1200'
+						src={hero}
 						alt='Imagem do evento'
 						fill
 						className='object-cover'
 						priority
 					/>
-					<div className='absolute inset-0 bg-black/40 flex flex-col items-center justify-center text-white text-center p-4'>
+					<div className='absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white text-center p-4'>
 						<span className='bg-[#0066CC] px-3 py-1 rounded-full text-sm font-medium mb-4'>
 							15 a 20 de Agosto de 2025
 						</span>
@@ -92,9 +95,9 @@ export default async function Home() {
 						<p className='text-lg md:text-xl max-w-2xl mb-6'>
 							Celebrando a diversidade cultural da maior cidade do Brasil
 						</p>
-						<Button className='bg-[#0066CC] hover:bg-[#0055AA]'>
-							Inscreva-se Agora
-						</Button>
+						<Link href={'/inscricao'}>
+							<Button>Inscreva-se Agora</Button>
+						</Link>
 					</div>
 				</div>
 
@@ -685,9 +688,9 @@ export default async function Home() {
 								evento único!
 							</p>
 							<div className='flex flex-col sm:flex-row gap-4 justify-center'>
-								<Button className='bg-[#0066CC] hover:bg-[#0055AA]'>
-									Inscreva-se Agora
-								</Button>
+								<Link href={'/inscricao'}>
+									<Button>Inscreva-se Agora</Button>
+								</Link>
 								<Button
 									variant='outline'
 									className='border-[#0066CC] text-[#0066CC]'>
@@ -856,8 +859,7 @@ export default async function Home() {
 								</div>
 							</div>
 						</div>
-						{session?.user?.nome}
-						<Sair session={session} />
+
 						<div className='border-t border-white/20 mt-8 pt-6 text-center text-sm'>
 							<p>
 								© 2025 Prefeitura de São Paulo. Todos os direitos reservados.
