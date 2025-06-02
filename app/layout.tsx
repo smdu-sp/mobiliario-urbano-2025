@@ -6,6 +6,9 @@ import { QueryProvider } from '@/providers/QueryProvider';
 import { ThemeProvider } from '@/providers/ThemeProvider';
 import type { Metadata } from 'next';
 import './globals.css';
+import Navbar from '@/components/navbar';
+import Footer from '@/components/footer';
+import ObserverProvider from '@/providers/ObserverProvider';
 
 // import localFont from 'next/font/local';
 // import './globals.css';
@@ -34,11 +37,15 @@ export default function RootLayout({
 					<QueryProvider>
 						<ThemeProvider
 							attribute='class'
-							defaultTheme='white'
+							defaultTheme='light'
 							enableSystem
 							disableTransitionOnChange>
-							{children}
-							<Toaster richColors />
+							<ObserverProvider>
+								<Navbar />
+								{children}
+								<Toaster richColors />
+								<Footer />
+							</ObserverProvider>
 						</ThemeProvider>
 					</QueryProvider>
 				</AuthProvider>

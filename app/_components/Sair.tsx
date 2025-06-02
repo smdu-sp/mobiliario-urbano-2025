@@ -11,11 +11,17 @@ export default function Sair({ session }: { session: Session | null }) {
 	const router = useRouter();
 	return session ? (
 		<Button
-			variant='default'
+			variant={'outline'}
+			className=' text-secondary hover:text-foreground'
 			onClick={async () => await signOut()}>
 			Sair
 		</Button>
 	) : (
-		<Button onClick={() => router.push('/auth/login')}>Login</Button>
+		<Button
+			variant={'outline'}
+			className=' text-secondary hover:text-foreground'
+			onClick={() => router.push('/auth/login')}>
+			Login
+		</Button>
 	);
 }
