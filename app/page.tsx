@@ -33,18 +33,18 @@ export default async function Home() {
 						priority
 					/>
 					<div className='absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white text-center p-4'>
-						<span className='intersect:motion-preset-slide-up motion-delay-200 bg-primary/50 px-4 py-1 rounded-full text-sm font-medium mb-4'>
+						<span className='motion-preset-float-sm motion-delay-200 bg-primary/50 px-4 py-1 rounded-full text-sm font-medium mb-10'>
 							15 a 20 de Agosto de 2025
 						</span>
-						<h1 className='intersect:motion-preset-slide-up motion-delay-150 text-3xl md:text-4xl lg:text-5xl font-bold mb-4 max-w-4xl'>
+						<h1 className='intersect-once intersect:motion-preset-slide-up motion-delay-150 text-3xl md:text-4xl lg:text-5xl font-bold mb-4 max-w-4xl'>
 							Festival Cultural de São Paulo
 						</h1>
-						<p className='intersect:motion-preset-slide-up motion-delay-200 text-lg md:text-xl max-w-2xl mb-6'>
+						<p className='intersect-once intersect:motion-preset-slide-up motion-delay-200 text-lg md:text-xl max-w-2xl mb-6'>
 							Celebrando a diversidade cultural da maior cidade do Brasil
 						</p>
 						<Link
 							href={'/inscricao'}
-							className='intersect:motion-preset-slide-up motion-delay-400'>
+							className='intersect-once intersect:motion-preset-slide-up motion-delay-400'>
 							<Button
 								size={'lg'}
 								className='text-lg'>
