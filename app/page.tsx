@@ -7,15 +7,7 @@ import {
 	AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import {
-	Calendar,
-	Clock,
-	HelpCircle,
-	Info,
-	MapPin,
-	Phone,
-	Ticket,
-} from 'lucide-react';
+import { Calendar, Clock, HelpCircle, Info, MapPin, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import hero from '../public/hero-image.jpg';
@@ -243,66 +235,6 @@ export default async function Home() {
 										* A programação completa dos demais dias está disponível no
 										site oficial do evento e no aplicativo da Prefeitura.
 									</p>
-								</div>
-							</AccordionContent>
-						</AccordionItem>
-
-						<AccordionItem
-							value='item-5'
-							className='border rounded-lg px-4 intersect:motion-preset-slide-up motion-delay-500'>
-							<AccordionTrigger className='py-4 flex gap-3 items-center'>
-								<div className=' flex items-center w-full'>
-									<Ticket className='h-5 w-5 text-primary flex-shrink-0' />
-									<p className='font-medium w-full text-center'>
-										Inscrições e Ingressos
-									</p>
-								</div>
-							</AccordionTrigger>
-							<AccordionContent className='pb-4 pt-1 px-9'>
-								<div className='space-y-3'>
-									<p className='text-gray-700 dark:text-gray-300'>
-										A entrada no evento é <strong>gratuita</strong>, mas para
-										algumas atividades específicas é necessário fazer inscrição
-										prévia devido à capacidade limitada.
-									</p>
-
-									<div className='mt-4'>
-										<h4 className='font-semibold'>
-											Atividades que requerem inscrição:
-										</h4>
-										<ul className='list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1 mt-2'>
-											<li>Workshops e oficinas</li>
-											<li>Palestras e debates</li>
-											<li>Visitas guiadas</li>
-											<li>Shows especiais no Auditório Ibirapuera</li>
-										</ul>
-									</div>
-
-									<div className='mt-4'>
-										<h4 className='font-semibold'>Como se inscrever:</h4>
-										<ul className='list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1 mt-2'>
-											<li>
-												Pelo site:{' '}
-												<span className='text-primary'>
-													www.festivalsaopaulo.sp.gov.br
-												</span>
-											</li>
-											<li>Pelo aplicativo da Prefeitura de São Paulo</li>
-											<li>
-												Presencialmente nos Centros Culturais da cidade (a
-												partir de 15/07/2025)
-											</li>
-										</ul>
-									</div>
-
-									<div className='bg-primary/20 p-3 rounded-md mt-4'>
-										<p className='text-sm text-foreground'>
-											<strong>Importante:</strong> As inscrições para as
-											atividades abrem no dia 01/08/2025 às 12h. Recomendamos
-											que se inscreva com antecedência, pois as vagas são
-											limitadas.
-										</p>
-									</div>
 								</div>
 							</AccordionContent>
 						</AccordionItem>
