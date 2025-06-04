@@ -2,16 +2,15 @@
 
 'use client';
 
-import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { FormEvent } from 'react';
+import { cn } from '@/lib/utils';
 import { signIn } from 'next-auth/react';
-import { toast } from 'sonner';
-import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { useRouter } from 'next/navigation';
+import { FormEvent } from 'react';
+import { toast } from 'sonner';
 
 import logo from '@/public/logo.png';
 
@@ -46,53 +45,53 @@ export function LoginForm({
 		<div
 			className={cn('flex flex-col gap-6', className)}
 			{...props}>
-			<Card>
-				<CardHeader className='text-center'>
-					<CardTitle className='text-xl'>
-						<Image
-							src={logo.src}
-							alt='SPUrbanismo'
-							width={602}
-							height={200}
-							className='w-60 mx-auto'
-						/>
-					</CardTitle>
-				</CardHeader>
-				<CardContent>
-					<form onSubmit={handleSubmit}>
+			<div className='-translate-y-14'>
+				<Image
+					src={logo.src}
+					alt='SPUrbanismo'
+					width={602}
+					height={200}
+					className='w-60 mx-auto rounded-md'
+				/>
+
+				<form
+					onSubmit={handleSubmit}
+					className='mt-10'>
+					<div className='grid gap-6'>
 						<div className='grid gap-6'>
-							<div className='grid gap-6'>
-								<div className='grid gap-2'>
-									<Label htmlFor='email'>Login</Label>
-									<Input
-										id='login'
-										type='text'
-										name='login'
-										placeholder='Login'
-										required
-									/>
-								</div>
-								<div className='grid gap-2'>
-									<div className='flex items-center'>
-										<Label htmlFor='senha'>Senha</Label>
-									</div>
-									<Input
-										id='senha'
-										type='password'
-										name='senha'
-										required
-									/>
-								</div>
-								<Button
-									type='submit'
-									className='w-full'>
-									Login
-								</Button>
+							<div className='grid gap-2'>
+								<Label htmlFor='email'>Login</Label>
+								<Input
+									className='bg-background'
+									id='login'
+									type='text'
+									name='login'
+									placeholder='Login'
+									required
+								/>
 							</div>
+							<div className='grid gap-2'>
+								<div className='flex items-center'>
+									<Label htmlFor='senha'>Senha</Label>
+								</div>
+								<Input
+									className='bg-background'
+									id='senha'
+									placeholder='*********'
+									type='password'
+									name='senha'
+									required
+								/>
+							</div>
+							<Button
+								type='submit'
+								className='w-full'>
+								Login
+							</Button>
 						</div>
-					</form>
-				</CardContent>
-			</Card>
+					</div>
+				</form>
+			</div>
 		</div>
 	);
 }
