@@ -11,6 +11,8 @@ import { Calendar, Clock, Info, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import hero from '../public/hero-image.jpg';
+import termo from '../public/Documents-rafiki.png';
+import edital from '../public/Checklist-rafiki.png';
 
 export default async function Home() {
 	return (
@@ -51,7 +53,7 @@ export default async function Home() {
 					id='info'
 					className='container h-full mx-auto px-4 py-10'>
 					<h2 className='intersect:motion-preset-slide-up motion-delay-150 text-2xl md:text-3xl font-semibold text-center mb-8 text-primary uppercase'>
-						Informações do Evento
+						Informações do Concurso
 					</h2>
 
 					<Accordion
@@ -437,6 +439,51 @@ export default async function Home() {
 							</AccordionContent>
 						</AccordionItem> */}
 					</Accordion>
+					<section
+						id='docs'
+						className='flex flex-col py-12 max-w-4xl mx-auto'>
+						<div className='flex items-center gap-10  justify-between'>
+							<div className=' flex flex-col gap-2'>
+								<h2 className='text-2xl md:text-3xl uppercase font-semibold'>
+									Edital
+								</h2>
+								<p className='text-balance text-muted-foreground'>
+									Lorem ipsum dolor sit amet consectetur adipisicing eles
+									adipisci quis eius quasi, nihil rem perferendis dicta vel
+									veniam eos architecto.
+								</p>
+								<Button className='w-fit mt-3'>Baixar Edital</Button>
+							</div>
+
+							<Image
+								src={edital}
+								alt='edital'
+								width={320}
+								height={200}
+								className='object-contain'></Image>
+						</div>
+						<div className='flex items-center gap-10 justify-between'>
+							<Image
+							
+								src={termo}
+								alt='edital'
+								width={320}
+								height={200}
+								className='object-cover'></Image>
+
+							<div className=' flex flex-col gap-2 '>
+								<h2 className='text-2xl md:text-3xl uppercase font-semibold'>
+									Termo de Referência
+								</h2>
+								<p className='text-balance text-muted-foreground'>
+									Lorem ipsum dolor sit amet consectetur adipisicing eles
+									adipisci quis eius quasi, nihil rem perferendis dicta vel
+									veniam eos architecto.
+								</p>
+								<Button className='w-fit mt-3'>Baixar Termo</Button>
+							</div>
+						</div>
+					</section>
 				</main>
 
 				{/* Seção de destaque */}

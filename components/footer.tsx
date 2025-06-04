@@ -78,6 +78,14 @@ export default function Footer() {
 									São Paulo Urbanismo
 								</Link>
 							</li>
+							<li>
+								<Link
+									href='https://storyset.com/software'
+									target='_blank'
+									className='hover:underline'>
+									Software illustrations by Storyset
+								</Link>
+							</li>
 						</ul>
 					</div>
 
@@ -176,10 +184,7 @@ export default function Footer() {
 				</div>
 
 				<div className='border-t border-white/20 mt-8 pt-6 text-center text-sm'>
-					<p>
-						© 2025 Prefeitura de São Paulo. Todos os
-						direitos reservados.
-					</p>
+					<p>© 2025 Prefeitura de São Paulo. Todos os direitos reservados.</p>
 				</div>
 			</div>
 		</footer>
