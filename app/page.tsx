@@ -27,18 +27,18 @@ export default async function Home() {
 						priority
 					/>
 					<div className='absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white text-center p-4'>
-						<span className='motion-preset-float bg-primary/90 px-4 py-1 rounded-full text-sm font-medium mb-10'>
+						<span className=' bg-primary/90 px-4 py-1 rounded-full text-sm font-medium mb-10'>
 							15 a 20 de Agosto de 2025
 						</span>
-						<h1 className='intersect-once intersect:motion-preset-slide-up motion-delay-150 text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-bold mb-4 max-w-4xl'>
+						<h1 className='intersect:motion-preset-slide-up motion-delay-150 text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-bold mb-4 max-w-4xl'>
 							Concurso Mobiliário Urbano
 						</h1>
-						<p className='intersect-once intersect:motion-preset-slide-up motion-delay-200 text-lg md:text-xl max-w-2xl mb-6 italic'>
+						<p className=' intersect:motion-preset-slide-up motion-delay-200 text-lg md:text-xl max-w-2xl mb-6 italic'>
 							Participe com seu projeto e constua o amanhã
 						</p>
 						<Link
 							href={'/inscricao'}
-							className='intersect-once intersect:motion-preset-slide-up motion-delay-400'>
+							className=' intersect:motion-preset-slide-up motion-delay-400'>
 							<Button
 								size={'lg'}
 								className='text-lg'>
@@ -444,15 +444,17 @@ export default async function Home() {
 						className='flex flex-col py-12 max-w-4xl mx-auto'>
 						<div className='flex items-center gap-10  justify-between'>
 							<div className=' flex flex-col gap-2'>
-								<h2 className='text-2xl md:text-3xl uppercase font-semibold'>
+								<h2 className='text-2xl md:text-3xl intersect:motion-preset-slide-up motion-delay-150 uppercase font-semibold'>
 									Edital
 								</h2>
-								<p className='text-balance text-muted-foreground'>
+								<p className='text-balance intersect:motion-preset-slide-up motion-delay-300 text-muted-foreground'>
 									Lorem ipsum dolor sit amet consectetur adipisicing eles
 									adipisci quis eius quasi, nihil rem perferendis dicta vel
 									veniam eos architecto.
 								</p>
-								<Button className='w-fit mt-3'>Baixar Edital</Button>
+								<Button className='w-fit mt-3 intersect:motion-preset-slide-up motion-delay-500'>
+									Baixar Edital
+								</Button>
 							</div>
 
 							<Image
@@ -460,27 +462,28 @@ export default async function Home() {
 								alt='edital'
 								width={320}
 								height={200}
-								className='object-contain'></Image>
+								className='object-contain intersect:motion-preset-blur-up motion-duration-1000'></Image>
 						</div>
 						<div className='flex items-center gap-10 justify-between'>
 							<Image
-							
 								src={termo}
 								alt='edital'
 								width={320}
 								height={200}
-								className='object-cover'></Image>
+								className='object-cover intersect:motion-preset-blur-up motion-duration-1000'></Image>
 
 							<div className=' flex flex-col gap-2 '>
-								<h2 className='text-2xl md:text-3xl uppercase font-semibold'>
+								<h2 className='text-2xl intersect:motion-preset-slide-up md:text-3xl uppercase font-semibold'>
 									Termo de Referência
 								</h2>
-								<p className='text-balance text-muted-foreground'>
+								<p className='intersect:motion-preset-slide-up motion-delay-150 text-balance text-muted-foreground'>
 									Lorem ipsum dolor sit amet consectetur adipisicing eles
 									adipisci quis eius quasi, nihil rem perferendis dicta vel
 									veniam eos architecto.
 								</p>
-								<Button className='w-fit mt-3'>Baixar Termo</Button>
+								<Button className='w-fit mt-3 intersect:motion-preset-slide-up motion-delay-300'>
+									Baixar Termo
+								</Button>
 							</div>
 						</div>
 					</section>
