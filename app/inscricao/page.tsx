@@ -560,8 +560,10 @@ export default function Inscricao() {
 								<div className='col-span-4 md:col-span-1 flex flex-col gap-3'>
 									<Label>Estado</Label>
 									<Input
+										disabled
 										placeholder='UF'
 										value={uf}
+										className='disabled:opacity-100'
 										onChange={(e) => setUf(formataUF(e.target.value))}
 										readOnly
 									/>
@@ -569,8 +571,10 @@ export default function Inscricao() {
 								<div className='col-span-4 md:col-span-3 flex flex-col gap-3'>
 									<Label>Cidade</Label>
 									<Input
+										disabled
 										placeholder='Cidade'
 										name='cidade'
+										className='disabled:opacity-100'
 										value={cidade}
 										onChange={(e) => setCidade(e.target.value)}
 										readOnly
@@ -579,7 +583,9 @@ export default function Inscricao() {
 								<div className='col-span-4 md:col-span-3 flex flex-col gap-3'>
 									<Label>Logradouro</Label>
 									<Input
+										disabled
 										placeholder='Logradouro'
+										className='disabled:opacity-100'
 										name='logradouro'
 										value={logradouro}
 										onChange={(e) => setLogradouro(e.target.value)}

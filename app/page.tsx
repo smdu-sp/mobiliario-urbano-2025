@@ -441,16 +441,17 @@ export default async function Home() {
 					</Accordion>
 					<section
 						id='docs'
-						className='flex flex-col py-12 max-w-4xl mx-auto'>
+						className='flex flex-col py-28 gap-14 max-w-4xl mx-auto'>
 						<div className='flex items-center gap-10  justify-between'>
 							<div className=' flex flex-col gap-2'>
 								<h2 className='text-2xl md:text-3xl intersect:motion-preset-slide-up motion-delay-150 uppercase font-semibold'>
 									Edital
 								</h2>
 								<p className='text-balance intersect:motion-preset-slide-up motion-delay-300 text-muted-foreground'>
-									Lorem ipsum dolor sit amet consectetur adipisicing eles
-									adipisci quis eius quasi, nihil rem perferendis dicta vel
-									veniam eos architecto.
+									Todas as informações que você precisa para participar estão
+									reunidas no edital do concurso. Faça o download e garanta que
+									seu projeto atenda a todos os requisitos técnicos e formais
+									estabelecidos.
 								</p>
 								<Button className='w-fit mt-3 intersect:motion-preset-slide-up motion-delay-500'>
 									Baixar Edital
@@ -460,15 +461,15 @@ export default async function Home() {
 							<Image
 								src={edital}
 								alt='edital'
-								width={320}
+								width={300}
 								height={200}
-								className='object-contain intersect:motion-preset-blur-up motion-duration-1000'></Image>
+								className='object-cover intersect:motion-preset-blur-up motion-duration-1000'></Image>
 						</div>
 						<div className='flex items-center gap-10 justify-between'>
 							<Image
 								src={termo}
 								alt='edital'
-								width={320}
+								width={300}
 								height={200}
 								className='object-cover intersect:motion-preset-blur-up motion-duration-1000'></Image>
 
@@ -477,9 +478,7 @@ export default async function Home() {
 									Termo de Referência
 								</h2>
 								<p className='intersect:motion-preset-slide-up motion-delay-150 text-balance text-muted-foreground'>
-									Lorem ipsum dolor sit amet consectetur adipisicing eles
-									adipisci quis eius quasi, nihil rem perferendis dicta vel
-									veniam eos architecto.
+									O Termo de Referência é o documento essencial para entender o contexto, os objetivos e os parâmetros técnicos do concurso. Baixe agora e utilize-o como guia para fundamentar sua proposta.
 								</p>
 								<Button className='w-fit mt-3 intersect:motion-preset-slide-up motion-delay-300'>
 									Baixar Termo
