@@ -11,7 +11,7 @@ import UserLogged from './user-logged';
 export default async function Navbar() {
 	const session = await auth();
 	return (
-		<header className='bg-primary text-white'>
+		<header className='bg-primary dark:bg-zinc-800 text-white'>
 			<div className='container mx-auto px-4 py-3 flex items-center justify-between'>
 				<Link href={'/'}>
 					<Image
