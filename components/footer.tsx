@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import escudo from '../public/escudo.png';
+import logo from '../public/logo-footer.png';
 import { Button } from './ui/button';
 
 export default function Footer() {
@@ -13,16 +13,15 @@ export default function Footer() {
 			<div className='container mx-auto px-4'>
 				<div className='grid grid-cols-1 md:grid-cols-4 items-end gap-8'>
 					<div>
-						<div className='flex flex-col items-start gap-2 mb-4'>
-							<Image
-								src={escudo}
-								alt='Brasão da Prefeitura de São Paulo'
-								width={40}
-								height={40}
-								className='bg-white rounded-full p-1'
-							/>
-							<span className='font-semibold'>Prefeitura de São Paulo</span>
-						</div>
+						<Image
+							src={logo}
+							alt='Brasão da Prefeitura de São Paulo'
+							width={140}
+							height={60}
+							quality={100}
+							className='mb-3'
+						/>
+
 						<p className='text-sm'>
 							Secretaria Municipal de Urbanismo e Licenciamento
 							<br />

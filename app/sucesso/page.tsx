@@ -1,7 +1,7 @@
 /** @format */
 
 import Image from 'next/image';
-import arch from '../../../public/Architect-rafiki.png';
+import arch from '../../public/Architect-rafiki.png';
 
 export default function SucessoPage() {
 	return (

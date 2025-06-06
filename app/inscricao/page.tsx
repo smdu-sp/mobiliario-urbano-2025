@@ -35,7 +35,7 @@ import {
 	formataUF,
 } from '@/lib/utils';
 import { Plus, X } from 'lucide-react';
-// import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, startTransition, useState } from 'react';
 import { toast } from 'sonner';
 import { ViaCepResposta } from '../api/buscar-cep/[cep]/cep.dto';
@@ -47,7 +47,7 @@ export default function Inscricao() {
 	const [open, setOpen] = useState(false);
 	const [step, setStep] = useState(initialStep);
 	const [protocolo, setProtocolo] = useState('');
-	// const router = useRouter();
+	const router = useRouter();
 
 	const [nome, setNome] = useState('');
 	const [email, setEmail] = useState('');
@@ -187,6 +187,11 @@ export default function Inscricao() {
 				toast.error('Erro ao enviar inscrição. Tente novamente.');
 			}
 		});
+	}
+
+	function handleClose() {
+		router.push('/sucesso');
+		setOpen(false);
 	}
 
 	async function buscaCEP(cep: string) {
@@ -643,9 +648,7 @@ export default function Inscricao() {
 				<ModalConcluido
 					open={open}
 					protocolo={protocolo}
-					onClose={() => {
-						setOpen(false);
-					}}
+					onClose={handleClose}
 				/>
 			</div>
 		</div>
