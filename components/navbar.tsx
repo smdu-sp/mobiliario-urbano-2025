@@ -7,6 +7,7 @@ import Image from 'next/image';
 import escudo from '../public/escudo.png';
 import { auth } from '@/auth';
 import Sair from '@/app/_components/Sair';
+import UserLogged from './user-logged';
 
 export default async function Navbar() {
 	const session = await auth();
@@ -55,6 +56,7 @@ export default async function Navbar() {
 							Acessibilidade
 						</Button> */}
 				<div className='flex items-center gap-5'>
+					<UserLogged />
 					<ToggleTheme />
 					{session?.user?.nome}
 					<Sair session={session} />
