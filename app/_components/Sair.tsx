@@ -21,7 +21,7 @@ export default function Sair({ session }: { session: Session | null }) {
 			variant={'outline'}
 			className=' text-secondary hover:text-foreground'
 			onClick={() => router.push('/auth/login')}>
-			Login
+			Entrar
 		</Button>
 	);
 }

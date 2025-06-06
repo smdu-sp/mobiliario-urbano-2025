@@ -35,7 +35,7 @@ import {
 	formataUF,
 } from '@/lib/utils';
 import { Plus, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+// import { useRouter } from 'next/navigation';
 import { BaseSyntheticEvent, startTransition, useState } from 'react';
 import { toast } from 'sonner';
 import { ViaCepResposta } from '../api/buscar-cep/[cep]/cep.dto';
@@ -47,7 +47,7 @@ export default function Inscricao() {
 	const [open, setOpen] = useState(false);
 	const [step, setStep] = useState(initialStep);
 	const [protocolo, setProtocolo] = useState('');
-	const router = useRouter();
+	// const router = useRouter();
 
 	const [nome, setNome] = useState('');
 	const [email, setEmail] = useState('');
@@ -147,6 +147,7 @@ export default function Inscricao() {
 	}
 
 	function handleSubmit(
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		event?: BaseSyntheticEvent<object, any, any> | undefined,
 	) {
 		event?.preventDefault();
@@ -163,8 +164,8 @@ export default function Inscricao() {
 		formData.append('logradouro', logradouro);
 		formData.append('cidade', cidade);
 		formData.append('uf', uf);
-		numero && formData.append('numero', numero);
-		complemento && formData.append('complemento', complemento);
+		if (numero) formData.append('numero', numero);
+		if (complemento) formData.append('complemento', complemento);
 		for (let x = 0; x < doc_especifica.length; x++)
 			formData.append('doc_especifica', doc_especifica[x]);
 		for (let x = 0; x < projetos.length; x++)
@@ -559,8 +560,10 @@ export default function Inscricao() {
 								<div className='col-span-4 md:col-span-1 flex flex-col gap-3'>
 									<Label>Estado</Label>
 									<Input
+										disabled
 										placeholder='UF'
 										value={uf}
+										className='disabled:opacity-100'
 										onChange={(e) => setUf(formataUF(e.target.value))}
 										readOnly
 									/>
@@ -568,8 +571,10 @@ export default function Inscricao() {
 								<div className='col-span-4 md:col-span-3 flex flex-col gap-3'>
 									<Label>Cidade</Label>
 									<Input
+										disabled
 										placeholder='Cidade'
 										name='cidade'
+										className='disabled:opacity-100'
 										value={cidade}
 										onChange={(e) => setCidade(e.target.value)}
 										readOnly
@@ -578,7 +583,9 @@ export default function Inscricao() {
 								<div className='col-span-4 md:col-span-3 flex flex-col gap-3'>
 									<Label>Logradouro</Label>
 									<Input
+										disabled
 										placeholder='Logradouro'
+										className='disabled:opacity-100'
 										name='logradouro'
 										value={logradouro}
 										onChange={(e) => setLogradouro(e.target.value)}

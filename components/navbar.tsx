@@ -31,21 +31,22 @@ export default async function Navbar() {
 						className='text-sm hover:underline'>
 						Início
 					</Link>
-					<Link
-						href='#'
+					<a
+						href='#info'
 						className='text-sm hover:underline'>
-						Serviços
-					</Link>
-					<Link
-						href='#'
+						Informações
+					</a>
+					<a
+						href='#docs'
 						className='text-sm hover:underline'>
-						Notícias
-					</Link>
-					<Link
-						href='#'
+						Documentos
+					</a>
+
+					<a
+						href='#contact'
 						className='text-sm hover:underline'>
 						Contato
-					</Link>
+					</a>
 				</nav>
 				{/* <Button
 							variant='outline'

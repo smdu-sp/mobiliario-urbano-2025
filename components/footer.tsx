@@ -1,18 +1,19 @@
 /** @format */
 
-import React from 'react';
-import { Button } from './ui/button';
 import Image from 'next/image';
 import Link from 'next/link';
 import escudo from '../public/escudo.png';
+import { Button } from './ui/button';
 
 export default function Footer() {
 	return (
-		<footer className='bg-primary text-white py-8 mt-auto bottom-0'>
+		<footer
+			id='contact'
+			className='bg-primary text-white py-8 mt-auto bottom-0'>
 			<div className='container mx-auto px-4'>
-				<div className='grid grid-cols-1 md:grid-cols-3 gap-8'>
+				<div className='grid grid-cols-1 md:grid-cols-4 items-end gap-8'>
 					<div>
-						<div className='flex items-center gap-2 mb-4'>
+						<div className='flex flex-col items-start gap-2 mb-4'>
 							<Image
 								src={escudo}
 								alt='Brasão da Prefeitura de São Paulo'
@@ -23,11 +24,30 @@ export default function Footer() {
 							<span className='font-semibold'>Prefeitura de São Paulo</span>
 						</div>
 						<p className='text-sm'>
-							Secretaria Municipal de Cultura
+							Secretaria Municipal de Urbanismo e Licenciamento
 							<br />
-							Av. São João, 473 - Centro
+							Rua São Bento, 405 - Centro
 							<br />
-							São Paulo - SP, 01035-000
+							São Paulo - SP, 01011-100
+						</p>
+					</div>
+					<div>
+						{/* <div className='flex flex-col items-start gap-2 mb-4'>
+							<Image
+								src={logo}
+								alt='Brasão da Prefeitura de São Paulo'
+								width={400}
+								height={80}
+								className='w-28'
+							/>
+							<span className='font-semibold'>São Paulo Urbanismo</span>
+						</div> */}
+						<p className='text-sm mt-auto'>
+							São Paulo Urbanismo
+							<br />
+							Rua São Bento, 405 - Centro
+							<br />
+							São Paulo - SP, 01011-100
 						</p>
 					</div>
 
@@ -36,37 +56,34 @@ export default function Footer() {
 						<ul className='space-y-2 text-sm'>
 							<li>
 								<Link
-									href='#'
+									href='https://capital.sp.gov.br/'
+									target='_blank'
 									className='hover:underline'>
 									Portal da Prefeitura
 								</Link>
 							</li>
 							<li>
 								<Link
-									href='#'
+									href='https://capital.sp.gov.br/web/licenciamento'
+									target='_blank'
 									className='hover:underline'>
-									Secretaria de Cultura
+									Secretaria de Urbanismo e Licenciamento
 								</Link>
 							</li>
 							<li>
 								<Link
-									href='#'
+									href='https://capital.sp.gov.br/web/sp_urbanismo'
+									target='_blank'
 									className='hover:underline'>
-									Turismo em São Paulo
+									São Paulo Urbanismo
 								</Link>
 							</li>
 							<li>
 								<Link
-									href='#'
+									href='https://storyset.com/software'
+									target='_blank'
 									className='hover:underline'>
-									Mapa Cultural
-								</Link>
-							</li>
-							<li>
-								<Link
-									href='#'
-									className='hover:underline'>
-									Agenda Cultural
+									Software illustrations by Storyset
 								</Link>
 							</li>
 						</ul>

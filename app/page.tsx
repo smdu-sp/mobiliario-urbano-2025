@@ -7,18 +7,12 @@ import {
 	AccordionTrigger,
 } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
-import {
-	Calendar,
-	Clock,
-	HelpCircle,
-	Info,
-	MapPin,
-	Phone,
-	Ticket,
-} from 'lucide-react';
+import { Calendar, Clock, Info, Phone } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import hero from '../public/hero-image.jpg';
+import termo from '../public/Documents-rafiki.png';
+import edital from '../public/Checklist-rafiki.png';
 
 export default async function Home() {
 	return (
@@ -33,18 +27,18 @@ export default async function Home() {
 						priority
 					/>
 					<div className='absolute inset-0 bg-black/60 flex flex-col items-center justify-center text-white text-center p-4'>
-						<span className='motion-preset-float-sm motion-delay-200 bg-primary/50 px-4 py-1 rounded-full text-sm font-medium mb-10'>
+						<span className=' bg-primary/90 px-4 py-1 rounded-full text-sm font-medium mb-10'>
 							15 a 20 de Agosto de 2025
 						</span>
-						<h1 className='intersect-once intersect:motion-preset-slide-up motion-delay-150 text-3xl md:text-4xl lg:text-5xl font-bold mb-4 max-w-4xl'>
-							Festival Cultural de São Paulo
+						<h1 className='intersect:motion-preset-slide-up motion-delay-150 text-3xl md:text-4xl lg:text-5xl 2xl:text-6xl font-bold mb-4 max-w-4xl'>
+							Concurso Mobiliário Urbano
 						</h1>
-						<p className='intersect-once intersect:motion-preset-slide-up motion-delay-200 text-lg md:text-xl max-w-2xl mb-6'>
-							Celebrando a diversidade cultural da maior cidade do Brasil
+						<p className=' intersect:motion-preset-slide-up motion-delay-200 text-lg md:text-xl max-w-2xl mb-6 italic'>
+							Participe com seu projeto e constua o amanhã
 						</p>
 						<Link
 							href={'/inscricao'}
-							className='intersect-once intersect:motion-preset-slide-up motion-delay-400'>
+							className=' intersect:motion-preset-slide-up motion-delay-400'>
 							<Button
 								size={'lg'}
 								className='text-lg'>
@@ -55,14 +49,17 @@ export default async function Home() {
 				</div>
 
 				{/* Conteúdo principal com acordeões */}
-				<main className='container h-full mx-auto px-4 py-10'>
-					<h2 className='intersect:motion-preset-slide-up motion-delay-150 text-2xl md:text-3xl font-bold text-center mb-8 text-primary'>
-						Informações do Evento
+				<main
+					id='info'
+					className='container h-full mx-auto px-4 py-10'>
+					<h2 className='intersect:motion-preset-slide-up motion-delay-150 text-2xl md:text-3xl font-semibold text-center mb-8 text-primary uppercase'>
+						Informações do Concurso
 					</h2>
 
 					<Accordion
 						type='single'
 						collapsible
+						defaultValue='item-1'
 						className='w-full max-w-3xl mx-auto space-y-4'>
 						<AccordionItem
 							value='item-1'
@@ -76,18 +73,24 @@ export default async function Home() {
 								</div>
 							</AccordionTrigger>
 							<AccordionContent className='pb-4 pt-1 px-9'>
-								<p className='text-gray-700 dark:text-gray-300'>
-									O Festival Cultural de São Paulo é um evento anual organizado
-									pela Prefeitura Municipal que celebra a rica diversidade
-									cultural da cidade. Com apresentações artísticas, exposições,
-									workshops e gastronomia, o festival reúne o melhor da cultura
-									paulistana em um só lugar.
+								<p className='text-muted-foreground'>
+									A SP Urbanismo, com apoio da Secretaria de Urbanismo e
+									Licenciamento, vai realizar a segunda edição do Concurso
+									Nacional de Elementos de Mobiliário Urbano, iniciativa que
+									incentiva arquitetos e urbanistas a desenvolverem projetos
+									inovadores para os espaços públicos de São Paulo. O edital
+									está em elaboração e a pré-divulgação da iniciativa ocorre
+									durante a Semana de Design promovida pela DW! um dos maiores
+									eventos do setor no mundo.
 								</p>
-								<p className='text-gray-700 dark:text-gray-300 mt-3'>
-									Em sua 10ª edição, o festival deste ano terá como tema
-									&rdquo;São Paulo: Encontro de Culturas&rdquo;, destacando a
-									influência das diversas comunidades que formam a identidade da
-									cidade.
+								<p className='text-muted-foreground mt-3'>
+									O concurso terá como objetivo selecionar propostas de
+									mobiliário urbano – como bancos, totens, floreiras e
+									sanitários – que priorizem a redução do impacto ambiental, a
+									incorporação de novas tecnologias e a melhoria da experiência
+									dos cidadãos no espaço público. Além de valorizar o design e a
+									funcionalidade, a iniciativa reforça o compromisso da
+									Prefeitura com o desenvolvimento urbano sustentável.
 								</p>
 							</AccordionContent>
 						</AccordionItem>
@@ -99,7 +102,7 @@ export default async function Home() {
 								<div className=' flex items-center w-full'>
 									<Calendar className='h-5 w-5 text-primary flex-shrink-0' />
 									<p className='font-medium w-full text-center'>
-										Data e Horário
+										Data de Inscrição
 									</p>
 								</div>
 								<span className='font-medium'></span>
@@ -116,52 +119,6 @@ export default async function Home() {
 										<li>Segunda a Sexta: das 10h às 22h</li>
 										<li>Sábado e Domingo: das 9h às 23h</li>
 									</ul>
-									<p className='text-gray-700 dark:text-gray-300 mt-2'>
-										<strong>Cerimônia de Abertura:</strong> 15 de Agosto às 19h
-									</p>
-									<p className='text-gray-700 dark:text-gray-300'>
-										<strong>Encerramento:</strong> 20 de Agosto às 21h com show
-										especial
-									</p>
-								</div>
-							</AccordionContent>
-						</AccordionItem>
-
-						<AccordionItem
-							value='item-3'
-							className='border rounded-lg px-4 intersect:motion-preset-slide-up motion-delay-300'>
-							<AccordionTrigger className='py-4 flex gap-3 items-center'>
-								<div className=' flex items-center w-full'>
-									<MapPin className='h-5 w-5 text-primary flex-shrink-0' />
-									<p className='font-medium w-full text-center'>Local</p>
-								</div>
-								<span className='font-medium'></span>
-							</AccordionTrigger>
-							<AccordionContent className='pb-4 pt-1 px-9'>
-								<div className='space-y-3'>
-									<p className='text-gray-700 dark:text-gray-300'>
-										<strong>Parque Ibirapuera</strong>
-									</p>
-									<p className='text-gray-700 dark:text-gray-300'>
-										Av. Pedro Álvares Cabral - Vila Mariana, São Paulo - SP,
-										04094-050
-									</p>
-									<p className='text-gray-700 dark:text-gray-300'>
-										O evento acontecerá em diversas áreas do parque, incluindo:
-									</p>
-									<ul className='list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1'>
-										<li>Pavilhão da Bienal</li>
-										<li>Auditório Ibirapuera</li>
-										<li>Marquise</li>
-										<li>
-											Arena ao ar livre (montada especialmente para o evento)
-										</li>
-									</ul>
-									<div className='mt-4 h-[200px] w-full bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center'>
-										<span className='text-gray-500 dark:text-gray-400'>
-											Mapa do local
-										</span>
-									</div>
 								</div>
 							</AccordionContent>
 						</AccordionItem>
@@ -210,7 +167,9 @@ export default async function Home() {
 									</div>
 
 									<div>
-										<h4 className='font-semibold text-primary'>16 de Agosto</h4>
+										<h4 className='font-semibold text-primary'>
+											16 de Agosto (Julgamento)
+										</h4>
 										<ul className='mt-2 space-y-2'>
 											<li className='flex gap-2'>
 												<span className='text-sm font-medium w-16'>10:00</span>
@@ -238,70 +197,18 @@ export default async function Home() {
 											</li>
 										</ul>
 									</div>
-
-									<p className='text-sm text-muted-foreground  italic'>
-										* A programação completa dos demais dias está disponível no
-										site oficial do evento e no aplicativo da Prefeitura.
-									</p>
-								</div>
-							</AccordionContent>
-						</AccordionItem>
-
-						<AccordionItem
-							value='item-5'
-							className='border rounded-lg px-4 intersect:motion-preset-slide-up motion-delay-500'>
-							<AccordionTrigger className='py-4 flex gap-3 items-center'>
-								<div className=' flex items-center w-full'>
-									<Ticket className='h-5 w-5 text-primary flex-shrink-0' />
-									<p className='font-medium w-full text-center'>
-										Inscrições e Ingressos
-									</p>
-								</div>
-							</AccordionTrigger>
-							<AccordionContent className='pb-4 pt-1 px-9'>
-								<div className='space-y-3'>
-									<p className='text-gray-700 dark:text-gray-300'>
-										A entrada no evento é <strong>gratuita</strong>, mas para
-										algumas atividades específicas é necessário fazer inscrição
-										prévia devido à capacidade limitada.
-									</p>
-
-									<div className='mt-4'>
-										<h4 className='font-semibold'>
-											Atividades que requerem inscrição:
+									<div>
+										<h4 className='font-semibold text-primary'>
+											16 de Setembro (Resultado)
 										</h4>
-										<ul className='list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1 mt-2'>
-											<li>Workshops e oficinas</li>
-											<li>Palestras e debates</li>
-											<li>Visitas guiadas</li>
-											<li>Shows especiais no Auditório Ibirapuera</li>
-										</ul>
-									</div>
-
-									<div className='mt-4'>
-										<h4 className='font-semibold'>Como se inscrever:</h4>
-										<ul className='list-disc pl-5 text-gray-700 dark:text-gray-300 space-y-1 mt-2'>
-											<li>
-												Pelo site:{' '}
-												<span className='text-primary'>
-													www.festivalsaopaulo.sp.gov.br
+										<ul className='mt-2 space-y-2'>
+											<li className='flex gap-2'>
+												<span className='text-sm font-medium w-16'>10:00</span>
+												<span className='text-gray-700 dark:text-gray-300'>
+													Feira de artesanato
 												</span>
 											</li>
-											<li>Pelo aplicativo da Prefeitura de São Paulo</li>
-											<li>
-												Presencialmente nos Centros Culturais da cidade (a
-												partir de 15/07/2025)
-											</li>
 										</ul>
-									</div>
-
-									<div className='bg-primary/20 p-3 rounded-md mt-4'>
-										<p className='text-sm text-foreground'>
-											<strong>Importante:</strong> As inscrições para as
-											atividades abrem no dia 01/08/2025 às 12h. Recomendamos
-											que se inscreva com antecedência, pois as vagas são
-											limitadas.
-										</p>
 									</div>
 								</div>
 							</AccordionContent>
@@ -431,26 +338,10 @@ export default async function Home() {
 											</Button>
 										</div>
 									</div>
-
-									<div>
-										<h4 className='font-semibold'>Durante o evento:</h4>
-										<p className='mt-1 text-gray-700 dark:text-gray-300'>
-											Postos de informação estarão disponíveis em todos os
-											portões e áreas principais do evento.
-										</p>
-									</div>
-
-									<div>
-										<h4 className='font-semibold'>Imprensa:</h4>
-										<p className='mt-1 text-gray-700 dark:text-gray-300'>
-											Para credenciamento de imprensa, entre em contato pelo
-											e-mail: imprensa.festival@prefeitura.sp.gov.br
-										</p>
-									</div>
 								</div>
 							</AccordionContent>
 						</AccordionItem>
-						<AccordionItem
+						{/* <AccordionItem
 							value='item-7'
 							className='border rounded-lg px-4 z-50 intersect:motion-preset-slide-up motion-delay-700'>
 							<AccordionTrigger className='py-4 flex gap-3 items-center'>
@@ -546,21 +437,68 @@ export default async function Home() {
 									</div>
 								</div>
 							</AccordionContent>
-						</AccordionItem>
+						</AccordionItem> */}
 					</Accordion>
+					<section
+						id='docs'
+						className='flex flex-col py-28 gap-14 max-w-4xl mx-auto'>
+						<div className='flex items-center gap-10  justify-between'>
+							<div className=' flex flex-col gap-2'>
+								<h2 className='text-2xl md:text-3xl intersect:motion-preset-slide-up motion-delay-150 uppercase font-semibold'>
+									Edital
+								</h2>
+								<p className='text-balance intersect:motion-preset-slide-up motion-delay-300 text-muted-foreground'>
+									Todas as informações que você precisa para participar estão
+									reunidas no edital do concurso. Faça o download e garanta que
+									seu projeto atenda a todos os requisitos técnicos e formais
+									estabelecidos.
+								</p>
+								<Button className='w-fit mt-3 intersect:motion-preset-slide-up motion-delay-500'>
+									Baixar Edital
+								</Button>
+							</div>
+
+							<Image
+								src={edital}
+								alt='edital'
+								width={300}
+								height={200}
+								className='object-cover intersect:motion-preset-blur-up motion-duration-1000'></Image>
+						</div>
+						<div className='flex items-center gap-10 justify-between'>
+							<Image
+								src={termo}
+								alt='edital'
+								width={300}
+								height={200}
+								className='object-cover intersect:motion-preset-blur-up motion-duration-1000'></Image>
+
+							<div className=' flex flex-col gap-2 '>
+								<h2 className='text-2xl intersect:motion-preset-slide-up md:text-3xl uppercase font-semibold'>
+									Termo de Referência
+								</h2>
+								<p className='intersect:motion-preset-slide-up motion-delay-150 text-balance text-muted-foreground'>
+									O Termo de Referência é o documento essencial para entender o contexto, os objetivos e os parâmetros técnicos do concurso. Baixe agora e utilize-o como guia para fundamentar sua proposta.
+								</p>
+								<Button className='w-fit mt-3 intersect:motion-preset-slide-up motion-delay-300'>
+									Baixar Termo
+								</Button>
+							</div>
+						</div>
+					</section>
 				</main>
 
 				{/* Seção de destaque */}
 				<section className='bg-primary/10 py-12'>
 					<div className='container mx-auto px-4'>
-						<div className='max-w-3xl mx-auto text-center'>
-							<h2 className='text-2xl md:text-3xl intersect:motion-preset-slide-up motion-delay-150 font-bold mb-6 text-foreground'>
-								Participe do Festival Cultural de São Paulo
+						<div className='max-w-4xl mx-auto text-center'>
+							<h2 className='text-2xl md:text-3xl intersect:motion-preset-slide-up motion-delay-150 font-semibold mb-5 text-foreground uppercase'>
+								Cadastre-se e projete a cidade que você quer ver
 							</h2>
 							<p className='text-muted-foreground intersect:motion-preset-slide-up motion-delay-200 text-balance mb-8'>
-								Não perca a oportunidade de vivenciar a riqueza cultural da
-								maior cidade do Brasil. Inscreva-se agora e faça parte deste
-								evento único!
+								Não perca a chance de contribuir com ideias para o futuro da
+								maior cidade do Brasil. Inscreva seu projeto e faça parte deste
+								concurso.
 							</p>
 							<div className='flex flex-col intersect:motion-preset-slide-up motion-delay-300 sm:flex-row gap-4 justify-center'>
 								<Link href={'/inscricao'}>
