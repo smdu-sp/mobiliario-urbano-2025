@@ -48,7 +48,6 @@ export default function Inscricao() {
 	const [step, setStep] = useState(initialStep);
 	const [protocolo, setProtocolo] = useState('');
 	const router = useRouter();
-
 	const [nome, setNome] = useState('');
 	const [email, setEmail] = useState('');
 	const [telefone, setTelefone] = useState('');
@@ -68,7 +67,6 @@ export default function Inscricao() {
 	const [termos, setTermos] = useState(false);
 	const [envioUnico, setEnvioUnico] = useState(false);
 	const [participantes, setParticipantes] = useState<IParticipante[]>([]);
-
 	const [participanteNome, setParticipanteNome] = useState('');
 	const [participanteDocumento, setParticipanteDocumento] = useState('');
 

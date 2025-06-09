@@ -23,7 +23,7 @@ const ModalConcluido: React.FC<ModalConcluidoProps> = ({
 	const router = useRouter();
 
 	function handleClose() {
-		router.push('/inscricao/sucesso');
+		router.push('/sucesso');
 	}
 	return (
 		<Dialog

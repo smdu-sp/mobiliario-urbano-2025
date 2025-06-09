@@ -4,6 +4,7 @@
 import { criarCadastro } from '@/services/cadastros';
 import { NextRequest, NextResponse } from 'next/server';
 import { IParticipante } from './cadastro.dto';
+import { cookies } from 'next/headers';
 
 export async function POST(req: NextRequest) {
 	try {
@@ -55,8 +56,14 @@ export async function POST(req: NextRequest) {
 				{ message: 'Falha ao enviar cadastro' },
 				{ status: 500 },
 			);
-		return NextResponse.json({ protocolo: cadastro }, { status: 201 });
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+
+		if (cadastro) {
+			const cookieStore = await cookies();
+			cookieStore.set('cadastrado', 'true');
+			return NextResponse.json({ protocolo: cadastro }, { status: 201 });
+		}
+
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	} catch (error: any) {
 		console.error('Error uploading file:', error);
 		return NextResponse.json(
