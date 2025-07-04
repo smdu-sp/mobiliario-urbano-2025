@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server"
-import { ViaCepResposta } from "./cep.dto";
+// import { ViaCepResposta } from "./cep.dto";
 
 export async function GET(
   _: Request,
@@ -10,13 +10,14 @@ export async function GET(
     status: 400,
     error: "CEP é obrigatório!"
   })
-  const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
-  const data: ViaCepResposta = await resposta.json()
+  // const resposta = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+  // const data: ViaCepResposta = await resposta.json()
   try {
     return NextResponse.json({
       status: 200,
     })
   } catch (err) {
+    console.log(err)
     return NextResponse.json({
       status: 500,
       error: "CEP não encontrado"

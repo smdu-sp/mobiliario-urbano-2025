@@ -1,5 +1,4 @@
-import { buscarPorLogin, buscarPorLoginOuNome, buscarPorNome } from "@/services/ldap";
-import { createClient } from "ldapjs";
+import { buscarPorLoginOuNome } from "@/services/ldap";
 import { NextResponse } from "next/server";
 
 export async function GET(

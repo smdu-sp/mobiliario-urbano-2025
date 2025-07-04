@@ -2,6 +2,7 @@
 
 import { create as CreteCadastro } from '@/app/api/cadastro/cadastro.dto';
 import { db } from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import fs from 'fs';
 
 function geraProtocolo(id: number) {
@@ -14,7 +15,8 @@ function geraProtocolo(id: number) {
 
 async function criarCadastro(cadastro: CreteCadastro): Promise<string | null> {
 	const protocolo = await db.$transaction(
-		async (tx) => {
+		// eslint-disable-next-line @typescript-eslint/no-explicit-any
+		async (tx: any) => {
 			const { doc_especifica, projetos, participantes, ...data } = cadastro;
 			const novo_cadastro = await tx.cadastro.create({ data });
 			const protocolo = geraProtocolo(+novo_cadastro.id);

@@ -5,7 +5,7 @@ import { db } from '@/lib/prisma';
 import { Client as LdapClient } from 'ldapts';
 
 const ldap = new LdapClient({
-	url: process.env.LDAP_SERVER || '',
+	url: process.env.LDAP_SERVER || 'ldap://1.1.1.1',
 });
 
 async function bind(login: string, senha: string) {
