@@ -16,6 +16,7 @@ datasource db {
 
 enum Permissao {
   DEV
+  PARTICIPANTE
   TOTAL
   LICITACAO
   JULGADORA
@@ -27,16 +28,16 @@ enum Tipo_Usuario {
 }
 
 model Usuario {
-  id            String        @id @default(uuid())
-  nome          String
-  email         String        @unique
-  login         String?       @unique
-  permissao     Permissao
-  senha         String?
-  tipo          Tipo_Usuario  @default(INTERNO)
+  id        String       @id @default(uuid())
+  nome      String
+  email     String       @unique
+  login     String?      @unique
+  permissao Permissao
+  senha     String?
+  tipo      Tipo_Usuario @default(INTERNO)
 
-  criadoEm      DateTime      @default(now())
-  atualizadoEm  DateTime      @default(now())
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @default(now())
 
   @@map("usuarios")
 }
@@ -45,6 +46,7 @@ enum Tipo_Carteira {
   CAU
   CREA
 }
+
 model Cadastro {
   id              Int           @id @default(autoincrement())
   nome            String
@@ -63,25 +65,25 @@ model Cadastro {
   carteira_numero String
   equipe          Boolean       @default(false)
 
-  criadoEm        DateTime      @default(now())
-  atualizadoEm    DateTime      @default(now()) @updatedAt
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @default(now()) @updatedAt
 
-  arquivos        Arquivo[]
-  participantes   Participante[]
+  arquivos      Arquivo[]
+  participantes Participante[]
 
   @@map("cadastros")
 }
 
 model Participante {
-  id            Int          @id @default(autoincrement())
-  nome          String
-  documento     String
-  cadastroId    Int
+  id         Int    @id @default(autoincrement())
+  nome       String
+  documento  String
+  cadastroId Int
 
-  criadoEm      DateTime     @default(now())
-  atualizadoEm  DateTime     @default(now()) @updatedAt
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @default(now()) @updatedAt
 
-  cadastro      Cadastro     @relation(fields: [cadastroId], references: [id])
+  cadastro Cadastro @relation(fields: [cadastroId], references: [id])
 
   @@map("participantes")
 }
@@ -92,15 +94,15 @@ enum TipoArquivo {
 }
 
 model Arquivo {
-  id            String      @id @default(uuid())
-  caminho       String
-  tipo          TipoArquivo
-  cadastroId    Int
+  id         String      @id @default(uuid())
+  caminho    String
+  tipo       TipoArquivo
+  cadastroId Int
 
-  criadoEm      DateTime    @default(now())
-  atualizadoEm  DateTime    @default(now())
+  criadoEm     DateTime @default(now())
+  atualizadoEm DateTime @default(now())
 
-  cadastro      Cadastro    @relation(fields: [cadastroId], references: [id])
+  cadastro Cadastro @relation(fields: [cadastroId], references: [id])
 
   @@map("arquivos")
 }

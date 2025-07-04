@@ -1,9 +1,10 @@
 const privateRoutes = ["/cadastros"]
 const apiOpenRoutes = [
-    "/api/cadastro",
-    "/api/auth/",
-    "/api/ldap/bind"
-]
+  "/api/cadastro",
+  "/api/pre-cadastro",
+  "/api/auth/",
+  "/api/ldap/bind",
+];
 
 export {
     privateRoutes,

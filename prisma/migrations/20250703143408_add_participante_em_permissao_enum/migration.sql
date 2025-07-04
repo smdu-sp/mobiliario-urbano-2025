@@ -1,0 +1,2 @@
+-- AlterEnum
+ALTER TYPE "Permissao" ADD VALUE 'PARTICIPANTE';
